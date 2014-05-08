@@ -2,8 +2,10 @@ src/
 pkg/
 *~
 *.part
-linux-*.tar.xz
-patch-*.xz
+*.xz
+*.bz2
+*.gz
 *.log
 *.patch
-*.src.tar.gz
+*.asc
+*.sig

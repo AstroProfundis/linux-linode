@@ -7,14 +7,19 @@ _basekernel=3.14
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
 pkgver=${_basekernel}.3
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
-url="https://github.com/yardenac/linux-linode"
+url="https://github.com/AstroProfundis/linux-linode"
 license=(GPL2)
 makedepends=(xmlto docbook-xsl kmod inetutils bc 'gcc>=4.9.0')
 options=('!strip')
+_ckpatchversion=1
+_ckpatchname="patch-3.14-ck${_ckpatchversion}"
+_gcc_patch="enable_additional_cpu_optimizations_for_gcc.patch"
 source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         "https://www.kernel.org/pub/linux/kernel/v3.x/patch-${pkgver}.xz"
+	"http://ck.kolivas.org/patches/3.0/3.14/3.14-ck${_ckpatchversion}/${_ckpatchname}.bz2"
+	"http://repo-ck.com/source/gcc_patch/${_gcc_patch}.gz"
         'config'
         'config.x86_64'
         'menu.lst'
@@ -23,8 +28,10 @@ source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         'https://projects.archlinux.org/svntogit/packages.git/plain/linux/trunk/change-default-console-loglevel.patch')
 sha512sums=('5730d83a7a81134c1e77c0bf89e42dee4f8251ad56c1ac2be20c59e26fdfaa7bea55f277e7af156b637f22e1584914a46089af85039177cb43485089c74ac26e'
             '1da62f5140965befb39f9565564cb00de189dd83b279632be50d8b1b4a9c59279907435b5d7f3c2fd47c13ba92468b23187f2d0433c7fbb5578f12359ed5584a'
-            'cfe85ba355a4eba535bf18266657aeb0577b2d1230ddd1c5114145102522905bf81bc3aa1d1720433c3fb4df6d872f394a19e218be3c3c3c922c1f2ef7121b50'
-            '48364a69012927219f56f02e8ceadb451bee3597a9ea1c0dae171bd2e00952c34ccea1512bd06c1263b91e2696120d2ff67d30d9bb48468f0eca6c37052dca3a'
+            'd745370376e660245e0a5cc4512f0c584a4c782ddb0747637d6ec60021d95afa09d5728f44756c48843b398ba3072823bea99b1713c0833c941a522da0b6f305'
+            'a149a6c62c6654b5efe76308037d37b9421114e6257343a22eae84f4489e210927d1db16e5742fd04bb4eea5c8a9c1e541d9bbf82d495fffaae9d645a5fd5d3f'
+            '41057e8e8a4fbaebcbbb92de0c08e8bc8dce71045163305d207283bebc23fba3a9850e44053470eb60100d6d35ca67f0da63e72a865339c5401f9db80a57faf9'
+            '18bf54567eeda2ba9458d157790fbcb1fcbd1d1c163a45493695d446ce1b04fd52a4bf5d4d5a537ad16e4ff57fe1cefddf4dc9c1ca539acf63e462417c657b15'
             'f4191d63f71920a4c366c6c291205a780b7ddca952b4420dfb52b9e6d33c818b431830afe990df3ef3601458959a1b39b88c084b416a814cb7a957187670b733'
             'a0a78831075336edef0a8faa34fa550986c3c4d89a89f4f39d798da0211129dc90257d162bec2cdefabef2eb5886a710e70c72074b2f3016788861d05d1e2a1f'
             '61addb73b2811a369b72ea097e310c63853f219d1384ea0e2cd2bc7b8389163e2e5679a9a198fe0977017658c18a90be0f73aaf72e9b829cc4a802a4fe7cfba0'
@@ -41,6 +48,20 @@ prepare() {
   patch -p1 -i "${srcdir}/patch-${pkgver}"
   patch -Np1 -i "${srcdir}/change-default-console-loglevel.patch"
   patch -Np1 -i "${srcdir}/fsid-0.patch"
+
+  # patch source with ck patchset
+  # fix double name in EXTRAVERSION
+  sed -i -re "s/^(.EXTRAVERSION).*$/\1 = /" "${srcdir}/${_ckpatchname}"
+  msg "Patching source with ck1 including BFS v0.447"
+  patch -Np1 -i "${srcdir}/${_ckpatchname}"
+
+  # Patch source to enable more gcc CPU optimizatons via the make nconfig
+  patch -Np1 -i "${srcdir}/${_gcc_patch}"
+
+  # Clean tree and copy ARCH config over
+  msg "Running make mrproper to clean source tree"
+  make mrproper
+
   if [ "${CARCH}" = "x86_64" ]; then
     cat "${srcdir}/config.x86_64" > ./.config
   else
