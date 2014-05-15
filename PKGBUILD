@@ -6,8 +6,8 @@ pkgname=linux-linode
 _basekernel=3.14
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.3
-pkgrel=4
+pkgver=${_basekernel}.4
+pkgrel=1
 arch=('i686' 'x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
 license=(GPL2)
@@ -28,7 +28,7 @@ source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
 	'https://projects.archlinux.org/svntogit/packages.git/plain/linux/trunk/0013-net-Start-with-correct-mac_len-in-skb_network_protocol.patch'
         'https://projects.archlinux.org/svntogit/packages.git/plain/linux/trunk/change-default-console-loglevel.patch')
 sha512sums=('5730d83a7a81134c1e77c0bf89e42dee4f8251ad56c1ac2be20c59e26fdfaa7bea55f277e7af156b637f22e1584914a46089af85039177cb43485089c74ac26e'
-            '1da62f5140965befb39f9565564cb00de189dd83b279632be50d8b1b4a9c59279907435b5d7f3c2fd47c13ba92468b23187f2d0433c7fbb5578f12359ed5584a'
+            '61eca26d57f7d7caa78d157582d4b98fbba1c85af73f1773fb51eab3db4381de53f4fbfbc202083e45297c0b4487bc58880a518e7ee9c0d616cddf0b3909b303'
             'd745370376e660245e0a5cc4512f0c584a4c782ddb0747637d6ec60021d95afa09d5728f44756c48843b398ba3072823bea99b1713c0833c941a522da0b6f305'
             'a149a6c62c6654b5efe76308037d37b9421114e6257343a22eae84f4489e210927d1db16e5742fd04bb4eea5c8a9c1e541d9bbf82d495fffaae9d645a5fd5d3f'
             '41057e8e8a4fbaebcbbb92de0c08e8bc8dce71045163305d207283bebc23fba3a9850e44053470eb60100d6d35ca67f0da63e72a865339c5401f9db80a57faf9'
@@ -38,7 +38,7 @@ sha512sums=('5730d83a7a81134c1e77c0bf89e42dee4f8251ad56c1ac2be20c59e26fdfaa7bea5
             '61addb73b2811a369b72ea097e310c63853f219d1384ea0e2cd2bc7b8389163e2e5679a9a198fe0977017658c18a90be0f73aaf72e9b829cc4a802a4fe7cfba0'
             '064e679dc2df2f33cbfe3f719622976f827770e594d5ad28d5cf138482860ca1b9abf21614f9da070274297ea579bda32e2ac3a26e590b213a41116b4bf09d69'
             '502192b5ce94c8254205f5ddb85bf50c5f1e78c768817b10dca3a7716a8c59d5e093842631acb51e3805cbf85522e0a9200942656f11bbb4ea1b7d61e24ddd78')
-pkgdesc="Kernel for Linode servers"
+pkgdesc="Kernel for Linode servers, with ck patchset"
 depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
 provides=(linux)
 conflicts=(grub grub-legacy)
