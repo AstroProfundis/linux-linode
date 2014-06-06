@@ -24,7 +24,6 @@ source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         'config.x86_64'
         'menu.lst'
         "preset"
-	'https://projects.archlinux.org/svntogit/packages.git/plain/linux/trunk/0013-net-Start-with-correct-mac_len-in-skb_network_protocol.patch'
         'https://projects.archlinux.org/svntogit/packages.git/plain/linux/trunk/change-default-console-loglevel.patch')
 sha512sums=('5730d83a7a81134c1e77c0bf89e42dee4f8251ad56c1ac2be20c59e26fdfaa7bea55f277e7af156b637f22e1584914a46089af85039177cb43485089c74ac26e'
             '068d139063c94f0e3fd4c24217705628b20f996f6e4cce88366c060150a123381babcfc05c953c58023deff0f7b28b4129b8d381b20dd4e3ac80ce4dbc4ec1e3'
@@ -34,7 +33,6 @@ sha512sums=('5730d83a7a81134c1e77c0bf89e42dee4f8251ad56c1ac2be20c59e26fdfaa7bea5
             '0e1b844c2c8bfc887d8826937d2b3fc798a7658c625574494a4ca48de08797879428c932eb164177a724516ac3355e0cdddd4dfdbb84cd43d556e48309f97512'
             'f4191d63f71920a4c366c6c291205a780b7ddca952b4420dfb52b9e6d33c818b431830afe990df3ef3601458959a1b39b88c084b416a814cb7a957187670b733'
             'a0a78831075336edef0a8faa34fa550986c3c4d89a89f4f39d798da0211129dc90257d162bec2cdefabef2eb5886a710e70c72074b2f3016788861d05d1e2a1f'
-            '064e679dc2df2f33cbfe3f719622976f827770e594d5ad28d5cf138482860ca1b9abf21614f9da070274297ea579bda32e2ac3a26e590b213a41116b4bf09d69'
             '502192b5ce94c8254205f5ddb85bf50c5f1e78c768817b10dca3a7716a8c59d5e093842631acb51e3805cbf85522e0a9200942656f11bbb4ea1b7d61e24ddd78')
 pkgdesc="Kernel for Linode servers, with ck patchset"
 depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
@@ -47,11 +45,6 @@ prepare() {
   cd "${srcdir}/${_srcname}"
   patch -p1 -i "${srcdir}/patch-${pkgver}"
   patch -Np1 -i "${srcdir}/change-default-console-loglevel.patch"
-
-  # fix tun/openvpn performance
-  # https://bugs.archlinux.org/task/40089
-  # https://bugzilla.kernel.org/show_bug.cgi?id=74051
-  patch -Np1 -i "${srcdir}/0013-net-Start-with-correct-mac_len-in-skb_network_protocol.patch"
 
   # patch source with ck patchset
   # fix double name in EXTRAVERSION
