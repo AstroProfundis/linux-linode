@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/x86 3.15.3-1 Kernel Configuration
+# Linux/x86 3.15.3-2 Kernel Configuration
 #
 # CONFIG_64BIT is not set
 CONFIG_X86_32=y
@@ -278,8 +278,13 @@ CONFIG_EFI_PARTITION=y
 #
 CONFIG_IOSCHED_NOOP=y
 CONFIG_IOSCHED_DEADLINE=y
-# CONFIG_IOSCHED_CFQ is not set
+CONFIG_IOSCHED_CFQ=y
+# CONFIG_CFQ_GROUP_IOSCHED is not set
+CONFIG_IOSCHED_BFQ=y
+# CONFIG_CGROUP_BFQIO is not set
 CONFIG_DEFAULT_DEADLINE=y
+# CONFIG_DEFAULT_CFQ is not set
+# CONFIG_DEFAULT_BFQ is not set
 # CONFIG_DEFAULT_NOOP is not set
 CONFIG_DEFAULT_IOSCHED="deadline"
 CONFIG_PADATA=y
