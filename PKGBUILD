@@ -3,10 +3,10 @@
 # tracks: https://projects.archlinux.org/svntogit/packages.git/log/trunk?h=packages/linux
 
 pkgname=linux-linode
-_basekernel=3.14
+_basekernel=3.15
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.8
+pkgver=${_basekernel}.3
 pkgrel=1
 arch=('i686' 'x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
@@ -14,23 +14,23 @@ license=(GPL2)
 makedepends=(xmlto docbook-xsl kmod inetutils bc 'gcc>=4.9.0')
 options=('!strip')
 _ckpatchversion=1
-_ckpatchname="patch-3.14-ck${_ckpatchversion}"
-_gcc_patch="enable_additional_cpu_optimizations_for_gcc.patch"
+_ckpatchname="patch-${_basekernel}-ck${_ckpatchversion}"
+_gcc_patch="enable_additional_cpu_optimizations_for_gcc_v4.9+_kernel_v3.15+.patch"
 source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         "https://www.kernel.org/pub/linux/kernel/v3.x/patch-${pkgver}.xz"
-	"http://ck.kolivas.org/patches/3.0/3.14/3.14-ck${_ckpatchversion}/${_ckpatchname}.bz2"
+	"http://ck.kolivas.org/patches/3.0/${_basekernel}/${_basekernel}-ck${_ckpatchversion}/${_ckpatchname}.bz2"
 	"http://repo-ck.com/source/gcc_patch/${_gcc_patch}.gz"
         'config'
         'config.x86_64'
         'menu.lst'
         "preset"
         'https://projects.archlinux.org/svntogit/packages.git/plain/linux/trunk/change-default-console-loglevel.patch')
-sha512sums=('a71fdb5391d664ecccef6602df638588e6202992415a788ad85fab9878ec6b76034c37de824069cfc6d6d502a1fab0eba98c69170f410d28951335e19d94db72'
-            'ba8784eb4968b639704e225cbd0455768a3d381ade19d37e0cc06cc00606cc9706163b27441f32b1de4a6f71d44b14004e931ea3f9a2d86c20e35dc881e6d451'
-            'd745370376e660245e0a5cc4512f0c584a4c782ddb0747637d6ec60021d95afa09d5728f44756c48843b398ba3072823bea99b1713c0833c941a522da0b6f305'
-            'a149a6c62c6654b5efe76308037d37b9421114e6257343a22eae84f4489e210927d1db16e5742fd04bb4eea5c8a9c1e541d9bbf82d495fffaae9d645a5fd5d3f'
-            '46c2f328ff9c6c2c856ccdfa10c27c57a53e59eaacf3548a79152bcc8ef3daeb9e09af76e5c5c2ff5dc65f4504d32962bedec36ea3d65f1a60be6f1c78ef4148'
-            'b8fab9077ec88f069cea858bded722c25e763c8e1519e818256d9f81debf96242530204e0d54b20f54a62e61ccf05db1a2a89174b618cf70614bea602892fbc4'
+sha512sums=('d5dc477cad4584e56e2e2ef9e0950c2b22e76e5cf5090a896ba099cb7c5e5db1853a4aeb96b199189653dc66d461557e95198e37516a619f7ddc01ba6b308e02'
+            'ef9bcf11241102d744e35c303a1267dc197b8f9ef9f9ecc344327a0d725b36348ebacfd64ef57b47f795bb7db9f101589db57216a5e0aef6741f1fb03a634e29'
+            'e018765a25c88d64a5b320030f252389e57fa04b736ad87675d86f1400534846dbf880912ca9efe395d9be56816d69b14411283da5c6dfe61b975caddd0beaa6'
+            '7a0da65c7db087a489d1aabeebffed4ff26a37b2c544727216d208c857d65b190af81b8786af93ebaa55a48f55be5efd05ea8035b8aaaba8186e4fe37814e011'
+            'a56f2cb5dbc4967ea4b7764150d610f29ae1795925110b562a877c7b3218604674061f1d24ea1260a76c1adaf155265a2e05b0ee3e3b543b6fa54772bce14f43'
+            'b3aa44e3ab0513621a81713d18e889fddd4e5342ca70b06f210aceee71caf16f51fcf8a7468e07c77ddecc833b6e4af9625f04e60b800ef77c526b752d8ca14b'
             'f4191d63f71920a4c366c6c291205a780b7ddca952b4420dfb52b9e6d33c818b431830afe990df3ef3601458959a1b39b88c084b416a814cb7a957187670b733'
             'a0a78831075336edef0a8faa34fa550986c3c4d89a89f4f39d798da0211129dc90257d162bec2cdefabef2eb5886a710e70c72074b2f3016788861d05d1e2a1f'
             '502192b5ce94c8254205f5ddb85bf50c5f1e78c768817b10dca3a7716a8c59d5e093842631acb51e3805cbf85522e0a9200942656f11bbb4ea1b7d61e24ddd78')
@@ -49,7 +49,7 @@ prepare() {
   # patch source with ck patchset
   # fix double name in EXTRAVERSION
   sed -i -re "s/^(.EXTRAVERSION).*$/\1 = /" "${srcdir}/${_ckpatchname}"
-  msg "Patching source with ck1 including BFS v0.447"
+  msg "Patching source with ck1 including BFS v0.448"
   patch -Np1 -i "${srcdir}/${_ckpatchname}"
 
   # Patch source to enable more gcc CPU optimizatons via the make nconfig
