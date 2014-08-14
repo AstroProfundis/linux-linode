@@ -6,8 +6,8 @@ pkgname=linux-linode
 _basekernel=3.15
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.8
-pkgrel=2
+pkgver=${_basekernel}.9
+pkgrel=1
 arch=('i686' 'x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
 license=(GPL2)
@@ -28,16 +28,16 @@ source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         'config.x86_64'
         'menu.lst'
         "preset"
-        'https://projects.archlinux.org/svntogit/packages.git/plain/linux/trunk/change-default-console-loglevel.patch')
+        'change-default-console-loglevel.patch::https://projects.archlinux.org/svntogit/packages.git/plain/trunk/change-default-console-loglevel.patch?h=packages/linux&id=80b436a10640b47f9ab25af4926d2d16d55a8001')
 sha512sums=('d5dc477cad4584e56e2e2ef9e0950c2b22e76e5cf5090a896ba099cb7c5e5db1853a4aeb96b199189653dc66d461557e95198e37516a619f7ddc01ba6b308e02'
-            '2f2787976f0f273f83513422dd3f443cca73b50faceea8f075b5afa9bd61fa7073b608063501792ec24b60f0b65da6a93df3acc5422c16ed6dc2fcc258d6d21f'
+            '53c48125e0965dbfa327a395085455b36a2736965cf4e911acf56db9eae7a534486b69ca3ed6be776dae6746ea6eb665aacf4e9c85ff29e975934386caa4456b'
             '009238524b9e45ba0b0e85b78c5e98c1a54276f5425ab3fc56850d3cd334d0bb4cf75e9d1749f0f0def59c8a1bcc0a12a64787698328e5fd51e0e8158d5c3dc4'
             'b499354d0244c024ff077aec7a6e9d2d05b4523ddc63fc2a0a688fcbf38ed58ffc30924ff4ba9116530afd9f5e39cfe4f12067d31d2f45a32fdd28f24c6ae07d'
             'cfaba4e000d89e8cb6722d06d75d26e5396cf799a3e4c6ea169de008d1f97e26449a1af0a1fd5389bea21de248c71ce653f805dd9dfcfc4c74a8f95521f1dd7f'
             'e018765a25c88d64a5b320030f252389e57fa04b736ad87675d86f1400534846dbf880912ca9efe395d9be56816d69b14411283da5c6dfe61b975caddd0beaa6'
             '7a0da65c7db087a489d1aabeebffed4ff26a37b2c544727216d208c857d65b190af81b8786af93ebaa55a48f55be5efd05ea8035b8aaaba8186e4fe37814e011'
-            '17f53fd1acdf7cc2700c2b88e81de4512653115662d4bf3b8072c1a57ee7ddde4a0618b0eb5baffad00004bea16ffb3d54f859e974d27ea3701aebfeb5aed168'
-            '333bd248bc87031b4d2b1b52e260b5517f7d7bee8ddc0b126fbc91c07876d6818ba0520f5847581b66fe29d179e4bb50889155c036de2e9138bd61c27ec8db0b'
+            'e253401392a3e88fd0ec60074a2038181a64f82c0cedf4c5fcb7d0e876692086d727519b664d37a1f7325ae820d6435b79902e4d7164e33d8ea694ce060f2e8f'
+            'a613e5933ea8352603d2ace6b9b5cfb869e28d0d3875c9c332ab815821d9671f675db33ae8538f157875d159f59d76dff341d6b1e44163a2e08ce61968c60d21'
             'f4191d63f71920a4c366c6c291205a780b7ddca952b4420dfb52b9e6d33c818b431830afe990df3ef3601458959a1b39b88c084b416a814cb7a957187670b733'
             'a0a78831075336edef0a8faa34fa550986c3c4d89a89f4f39d798da0211129dc90257d162bec2cdefabef2eb5886a710e70c72074b2f3016788861d05d1e2a1f'
             '502192b5ce94c8254205f5ddb85bf50c5f1e78c768817b10dca3a7716a8c59d5e093842631acb51e3805cbf85522e0a9200942656f11bbb4ea1b7d61e24ddd78')
