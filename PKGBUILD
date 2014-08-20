@@ -3,44 +3,42 @@
 # tracks: https://projects.archlinux.org/svntogit/packages.git/log/trunk?h=packages/linux
 
 pkgname=linux-linode
-_basekernel=3.15
+_basekernel=3.16
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.10
+pkgver=${_basekernel}.1
 pkgrel=1
-arch=('i686' 'x86_64')
+arch=('x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
 license=(GPL2)
 makedepends=(xmlto docbook-xsl kmod inetutils bc 'gcc>=4.9.0')
 options=('!strip')
 _ckpatchversion=1
 _ckpatchname="patch-${_basekernel}-ck${_ckpatchversion}"
-_bfqpath="http://algo.ing.unimo.it/people/paolo/disk_sched/patches/3.15.0-v7r5"
+_bfqpath="http://algo.ing.unimo.it/people/paolo/disk_sched/patches/3.16.0-v7r5"
 _gcc_patch="enable_additional_cpu_optimizations_for_gcc_v4.9+_kernel_v3.15+.patch"
 source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         "https://www.kernel.org/pub/linux/kernel/v3.x/patch-${pkgver}.xz"
-        "${_bfqpath}/0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r5-3.15.patch"
-        "${_bfqpath}/0002-block-introduce-the-BFQ-v7r5-I-O-sched-for-3.15.patch"
-        "${_bfqpath}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r5-for-3.15.0.patch"
+        "${_bfqpath}/0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r5-3.16.patch"
+        "${_bfqpath}/0002-block-introduce-the-BFQ-v7r5-I-O-sched-for-3.16.patch"
+        "${_bfqpath}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r5-for-3.16.0.patch"
         "http://ck.kolivas.org/patches/3.0/${_basekernel}/${_basekernel}-ck${_ckpatchversion}/${_ckpatchname}.bz2"
         "http://repo-ck.com/source/gcc_patch/${_gcc_patch}.gz"
         'config'
-        'config.x86_64'
         'menu.lst'
         "preset"
-        'change-default-console-loglevel.patch::https://projects.archlinux.org/svntogit/packages.git/plain/trunk/change-default-console-loglevel.patch?h=packages/linux&id=80b436a10640b47f9ab25af4926d2d16d55a8001')
-sha512sums=('d5dc477cad4584e56e2e2ef9e0950c2b22e76e5cf5090a896ba099cb7c5e5db1853a4aeb96b199189653dc66d461557e95198e37516a619f7ddc01ba6b308e02'
-            '555e7cf9661bd0a518ad071b84b94a90a4a673e51b1cd764219da6092757e22ae6f87b66884fde29ffd034d713f28634b4922fd221b45dd309fdf08e6360f07b'
-            '009238524b9e45ba0b0e85b78c5e98c1a54276f5425ab3fc56850d3cd334d0bb4cf75e9d1749f0f0def59c8a1bcc0a12a64787698328e5fd51e0e8158d5c3dc4'
-            'b499354d0244c024ff077aec7a6e9d2d05b4523ddc63fc2a0a688fcbf38ed58ffc30924ff4ba9116530afd9f5e39cfe4f12067d31d2f45a32fdd28f24c6ae07d'
-            'cfaba4e000d89e8cb6722d06d75d26e5396cf799a3e4c6ea169de008d1f97e26449a1af0a1fd5389bea21de248c71ce653f805dd9dfcfc4c74a8f95521f1dd7f'
-            'e018765a25c88d64a5b320030f252389e57fa04b736ad87675d86f1400534846dbf880912ca9efe395d9be56816d69b14411283da5c6dfe61b975caddd0beaa6'
+        'https://projects.archlinux.org/svntogit/packages.git/plain/linux/trunk/change-default-console-loglevel.patch')
+sha512sums=('64033e741d3f42ed06010e63e69d66e1d3d9414ef20f76834508878d4218b72619541a18ef4fd377204af2859e52198310998109b20ed9b67722586b28c9a231'
+            '01715f6c276611184c2a41d0736c4b91b155daa5c3b67e0f3646e5a795ec22b9ff8cd4db8508eac71b0eb6a3c194fbf02b7bdeeb09626931bf34ebc03d224026'
+            'fd484e55bbff30f37e8d4b4c652bfce8d1e9a1bd2221e2d965ce18bd3eb929a3109fc02910535735b4af88f2f4700980f167dd7429b89a0fefdc24e778522473'
+            '63db43b6ce1d43f9cf4bc1736378eae3a53b396d684eb40502889e272f291208bacbcfcc2bdbab84ece472133a3b35ee4cdb11bc0bb0986d7f9fbad0b40d8ba1'
+            'b645b483623b2a5fa2806991e2f73df83faf4ecd5a331624e38c671ed462bf124b884caad2fc76c8eaa326e3645d2e3efe2d2c06da90410db4ff6798e3305326'
+            'ee7afadb6fe4c97bbd233fda704d424e556d9e4f68a216acc8c37460926746184a628c65093b81243d9ea9367a798bc8fd7bcf80a11ee30e13d04d3e4e0d9b35'
             '7a0da65c7db087a489d1aabeebffed4ff26a37b2c544727216d208c857d65b190af81b8786af93ebaa55a48f55be5efd05ea8035b8aaaba8186e4fe37814e011'
-            'e253401392a3e88fd0ec60074a2038181a64f82c0cedf4c5fcb7d0e876692086d727519b664d37a1f7325ae820d6435b79902e4d7164e33d8ea694ce060f2e8f'
-            'a613e5933ea8352603d2ace6b9b5cfb869e28d0d3875c9c332ab815821d9671f675db33ae8538f157875d159f59d76dff341d6b1e44163a2e08ce61968c60d21'
+            '96ab21847c13fdc6481ecb4cbc330b9adfe26b3766a8bbd9703a3472d0f684b6e3796781e1d151a663df8fcc09b167211aafa877e945494d39dec49e6cd6578f'
             'f4191d63f71920a4c366c6c291205a780b7ddca952b4420dfb52b9e6d33c818b431830afe990df3ef3601458959a1b39b88c084b416a814cb7a957187670b733'
             'a0a78831075336edef0a8faa34fa550986c3c4d89a89f4f39d798da0211129dc90257d162bec2cdefabef2eb5886a710e70c72074b2f3016788861d05d1e2a1f'
-            '502192b5ce94c8254205f5ddb85bf50c5f1e78c768817b10dca3a7716a8c59d5e093842631acb51e3805cbf85522e0a9200942656f11bbb4ea1b7d61e24ddd78')
+            'd9d28e02e964704ea96645a5107f8b65cae5f4fb4f537e224e5e3d087fd296cb770c29ac76e0ce95d173bc420ea87fb8f187d616672a60a0cae618b0ef15b8c8')
 pkgdesc="Kernel for Linode servers, with ck patchset"
 depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
 provides=(linux)
@@ -51,7 +49,7 @@ install=install
 prepare() {
   cd "${srcdir}/${_srcname}"
   patch -p1 -i "${srcdir}/patch-${pkgver}"
-  patch -Np1 -i "${srcdir}/change-default-console-loglevel.patch"
+  patch -p1 -i "${srcdir}/change-default-console-loglevel.patch"
 
   # patch source with BFQ patches
   msg "Patching source with BFQ patches"
@@ -72,11 +70,7 @@ prepare() {
   msg "Running make mrproper to clean source tree"
   make mrproper
 
-  if [ "${CARCH}" = "x86_64" ]; then
-    cat "${srcdir}/config.x86_64" > ./.config
-  else
-    cat "${srcdir}/config" > ./.config
-  fi
+  cat "${srcdir}/config" > ./.config
   sed -i '2iexit 0' scripts/depmod.sh
   sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"${_kernelname}-ck\"|g" ./.config
   sed -i "s|CONFIG_LOCALVERSION_AUTO=.*|CONFIG_LOCALVERSION_AUTO=n|g" ./.config
