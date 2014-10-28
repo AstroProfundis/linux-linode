@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/x86 3.16.1-1 Kernel Configuration
+# Linux/x86 3.16.6-1 Kernel Configuration
 #
 CONFIG_64BIT=y
 CONFIG_X86_64=y
@@ -334,6 +334,7 @@ CONFIG_PARAVIRT_CLOCK=y
 CONFIG_NO_BOOTMEM=y
 # CONFIG_MEMTEST is not set
 # CONFIG_MK8 is not set
+# CONFIG_MK8SSE3 is not set
 # CONFIG_MK10 is not set
 # CONFIG_MBARCELONA is not set
 # CONFIG_MBOBCAT is not set
