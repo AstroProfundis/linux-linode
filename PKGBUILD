@@ -6,7 +6,7 @@ pkgname=linux-linode
 _basekernel=3.14
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.17
+pkgver=${_basekernel}.22
 pkgrel=1
 arch=('i686' 'x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
@@ -26,14 +26,14 @@ source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         "preset"
         'https://projects.archlinux.org/svntogit/packages.git/plain/linux/trunk/change-default-console-loglevel.patch')
 sha512sums=('5730d83a7a81134c1e77c0bf89e42dee4f8251ad56c1ac2be20c59e26fdfaa7bea55f277e7af156b637f22e1584914a46089af85039177cb43485089c74ac26e'
-            '03638215934a08a67e3d92d051b6a341e1874872388de910870021934f11f8ed20502a1afbff89a24f0e14053a02f4e40441e2f9878b099ddd1504159ff19872'
+            'ccd02031badafe9c981cfc65d10eee674f76cd8bbcfd8d9765ec057b87dcb7d56583fb2b75eb0a6d14fa7aa028e15061aa79fe1618b40fb79dae6c0479e9202b'
             'd745370376e660245e0a5cc4512f0c584a4c782ddb0747637d6ec60021d95afa09d5728f44756c48843b398ba3072823bea99b1713c0833c941a522da0b6f305'
             'a149a6c62c6654b5efe76308037d37b9421114e6257343a22eae84f4489e210927d1db16e5742fd04bb4eea5c8a9c1e541d9bbf82d495fffaae9d645a5fd5d3f'
             'cd73e61e029b200535dd0bb86095f4d66fe4d28f0b73386e7f7bef56d44a35e663be35e3ed5fde81e57c78581982241441df462cf86594251bf85bac564fe413'
             '1eb1c8ad0ad64e89f5382fd58f902d146622238dd8c79d42943dd55113099f6d06179f7f394cdc08a198320cd7dd473001ada6adb390ad5c2e8c251c4f2c65c8'
             'f4191d63f71920a4c366c6c291205a780b7ddca952b4420dfb52b9e6d33c818b431830afe990df3ef3601458959a1b39b88c084b416a814cb7a957187670b733'
             'a0a78831075336edef0a8faa34fa550986c3c4d89a89f4f39d798da0211129dc90257d162bec2cdefabef2eb5886a710e70c72074b2f3016788861d05d1e2a1f'
-            '502192b5ce94c8254205f5ddb85bf50c5f1e78c768817b10dca3a7716a8c59d5e093842631acb51e3805cbf85522e0a9200942656f11bbb4ea1b7d61e24ddd78')
+            'd9d28e02e964704ea96645a5107f8b65cae5f4fb4f537e224e5e3d087fd296cb770c29ac76e0ce95d173bc420ea87fb8f187d616672a60a0cae618b0ef15b8c8')
 pkgdesc="Kernel for Linode servers, with ck patchset"
 depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
 provides=(linux)
