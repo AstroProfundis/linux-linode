@@ -6,14 +6,14 @@ pkgname=linux-linode
 _basekernel=3.16
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.2
+pkgver=${_basekernel}.6
 pkgrel=1
 arch=('x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
 license=(GPL2)
 makedepends=(xmlto docbook-xsl kmod inetutils bc 'gcc>=4.9.0')
 options=('!strip')
-_ckpatchversion=1
+_ckpatchversion=2
 _ckpatchname="patch-${_basekernel}-ck${_ckpatchversion}"
 _bfqpath="http://algo.ing.unimo.it/people/paolo/disk_sched/patches/3.16.0-v7r5"
 _gcc_patch="enable_additional_cpu_optimizations_for_gcc_v4.9+_kernel_v3.15+.patch"
@@ -29,11 +29,11 @@ source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         "preset"
         'https://projects.archlinux.org/svntogit/packages.git/plain/linux/trunk/change-default-console-loglevel.patch')
 sha512sums=('64033e741d3f42ed06010e63e69d66e1d3d9414ef20f76834508878d4218b72619541a18ef4fd377204af2859e52198310998109b20ed9b67722586b28c9a231'
-            '609a9e0f04e6d2b5dfc7a2dbf9e4de61b9456afee48856a2731e34e2e0fdf67a99b230bad653af568ffed8e40cd0d9acf929ae4678ea2e78d3cb87fda2f8cdbd'
+            'a6967f0ce8ef343b09a04d3bc336892c8504c82dc0d71d08e6179b1aa8ecdda63676a196c770fc54b8394237e0f02041ed9d71d8d4bf39b0f4211fef17198089'
             'fd484e55bbff30f37e8d4b4c652bfce8d1e9a1bd2221e2d965ce18bd3eb929a3109fc02910535735b4af88f2f4700980f167dd7429b89a0fefdc24e778522473'
             '63db43b6ce1d43f9cf4bc1736378eae3a53b396d684eb40502889e272f291208bacbcfcc2bdbab84ece472133a3b35ee4cdb11bc0bb0986d7f9fbad0b40d8ba1'
             'b645b483623b2a5fa2806991e2f73df83faf4ecd5a331624e38c671ed462bf124b884caad2fc76c8eaa326e3645d2e3efe2d2c06da90410db4ff6798e3305326'
-            'ee7afadb6fe4c97bbd233fda704d424e556d9e4f68a216acc8c37460926746184a628c65093b81243d9ea9367a798bc8fd7bcf80a11ee30e13d04d3e4e0d9b35'
+            '379b37a344ecfb11302a8869be3f763fb0e096ecd1eb6a594ee7d3735826f13072e5809077316fcb327bd515f7824a947c0f2c603ffc9c1d3d100aa50b4309a6'
             '7a0da65c7db087a489d1aabeebffed4ff26a37b2c544727216d208c857d65b190af81b8786af93ebaa55a48f55be5efd05ea8035b8aaaba8186e4fe37814e011'
             '30562a11556eecc49befd8499d8dd15dc39267bc56b91e09b0a434cd9a760c6ff4a1ff31c01a170cacc3f922f2ed496314a6fdab3b1a4a1e3cb30aa08887abc7'
             'f4191d63f71920a4c366c6c291205a780b7ddca952b4420dfb52b9e6d33c818b431830afe990df3ef3601458959a1b39b88c084b416a814cb7a957187670b733'
