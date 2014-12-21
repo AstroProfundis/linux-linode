@@ -6,7 +6,7 @@ pkgname=linux-linode
 _basekernel=3.14
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.22
+pkgver=${_basekernel}.27
 pkgrel=1
 arch=('i686' 'x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
@@ -26,7 +26,7 @@ source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         "preset"
         'https://projects.archlinux.org/svntogit/packages.git/plain/linux/trunk/change-default-console-loglevel.patch')
 sha512sums=('5730d83a7a81134c1e77c0bf89e42dee4f8251ad56c1ac2be20c59e26fdfaa7bea55f277e7af156b637f22e1584914a46089af85039177cb43485089c74ac26e'
-            'ccd02031badafe9c981cfc65d10eee674f76cd8bbcfd8d9765ec057b87dcb7d56583fb2b75eb0a6d14fa7aa028e15061aa79fe1618b40fb79dae6c0479e9202b'
+            '1191ef739905b2e5057c5273e5cf026baea1ea4855dca8375dbe4ecaa7e6d2d38b8103e2781554f2d9ecf9026fdad1086c6b9d8f0b41fcb8e39aca0612e208e7'
             'd745370376e660245e0a5cc4512f0c584a4c782ddb0747637d6ec60021d95afa09d5728f44756c48843b398ba3072823bea99b1713c0833c941a522da0b6f305'
             'a149a6c62c6654b5efe76308037d37b9421114e6257343a22eae84f4489e210927d1db16e5742fd04bb4eea5c8a9c1e541d9bbf82d495fffaae9d645a5fd5d3f'
             'cd73e61e029b200535dd0bb86095f4d66fe4d28f0b73386e7f7bef56d44a35e663be35e3ed5fde81e57c78581982241441df462cf86594251bf85bac564fe413'
