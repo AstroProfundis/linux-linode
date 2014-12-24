@@ -7,7 +7,7 @@ _basekernel=3.18
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
 pkgver=${_basekernel}.1
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
 license=(GPL2)
@@ -69,7 +69,7 @@ prepare() {
 
   cat "${srcdir}/config" > ./.config
   sed -i '2iexit 0' scripts/depmod.sh
-  sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"${_kernelname}-ck\"|g" ./.config
+  sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"${_kernelname}\"|g" ./.config
   sed -i "s|CONFIG_LOCALVERSION_AUTO=.*|CONFIG_LOCALVERSION_AUTO=n|g" ./.config
   sed -ri "s|^(EXTRAVERSION =).*|\1 -${pkgrel}|" Makefile
   make prepare
