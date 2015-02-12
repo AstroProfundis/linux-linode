@@ -9,3 +9,5 @@ pkg/
 *.patch
 *.asc
 *.sig
+linux-*.tar.sign
+patch-*.sign

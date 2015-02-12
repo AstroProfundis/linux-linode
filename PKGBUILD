@@ -6,8 +6,8 @@ pkgname=linux-linode
 _basekernel=3.18
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.1
-pkgrel=2
+pkgver=${_basekernel}.7
+pkgrel=1
 arch=('x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
 license=(GPL2)
@@ -18,6 +18,7 @@ _ckpatchname="patch-${_basekernel}-ck${_ckpatchversion}"
 _bfqpath="http://algo.ing.unimo.it/people/paolo/disk_sched/patches/3.18.0-v7r6"
 _gcc_patch="enable_additional_cpu_optimizations_for_gcc_v4.9+_kernel_v3.15+.patch"
 source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
+        "https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.sign"
         "https://www.kernel.org/pub/linux/kernel/v3.x/patch-${pkgver}.xz"
         "${_bfqpath}/0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r6-3.18.patch"
         "${_bfqpath}/0002-block-introduce-the-BFQ-v7r6-I-O-sched-for-3.18.patch"
@@ -28,7 +29,8 @@ source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         'menu.lst'
         'preset')
 sha512sums=('2f0b72466e9bc538a675738aa416573d41bbbd7e3e2ffd5b5b127afde609ebc278cec5a3c37e73479607e957c13f1b4ed9782a3795e0dcc2cf8e550228594009'
-            '3c83cbf12a0c68607405ab253a85ef792d00bdca563a538069a5d4628d31dd0391ea4b4302cdd38cf5f5d6c7455df94ecd5d2ba77a5148e35d646c03bec3a31f'
+            'SKIP'
+            'a63f56818a3d16f7e39b9967ed751fd6f49837668d533e32ae5bbad7f834e0f3641d9829c27acaf7e65b10581dd1e7d15a05127550627edcd7f9ec7fb5780600'
             '58b7aa96279ac5989a74f5eb63bd6b2c827bb29a981452617cacc3b5fd5d84b22f65af07573fa38cd3bb7ca0e2c0965290f458317e2988744b90bd1e29a43f04'
             '2ddaa3c6ff9490016becedf241b8522edcbcadc80f7652478270d94a12ac8ee9dc8f47ad7fd19f7fcc3f21f70a492ad5aab548370f3994c402bdb3c1d79373df'
             '5a2c76366eefd263f18f484ab3921cbb140c62d4636d1703523e329a3b893d4c310dd7bf0f04b9953313bc7c83fd4b3e562b4edd9bd09797b7e57d87d69dc6cc'
@@ -37,6 +39,10 @@ sha512sums=('2f0b72466e9bc538a675738aa416573d41bbbd7e3e2ffd5b5b127afde609ebc278c
             '462780c9a25b47cabd5e9e5a7887d0490ab8bbd63fff9f6c744cb82309a31223479c405225b6bd3b1faa0e7895863ad02c9e97b06486bc6b2a990500926ce90b'
             '0ddff435474213f6c6e62576b6b3042aeffd1df84c47ca6195714a92c2655c33c56ce211c14934f4268afdf246077e1ea04e0958efc263c71aabfb497481022c'
             'a0a78831075336edef0a8faa34fa550986c3c4d89a89f4f39d798da0211129dc90257d162bec2cdefabef2eb5886a710e70c72074b2f3016788861d05d1e2a1f')
+validpgpkeys=(
+              'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linux Torvalds
+              '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
+             )
 pkgdesc="Kernel for Linode servers, with ck patchset"
 depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
 provides=(linux)
