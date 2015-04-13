@@ -3,10 +3,10 @@
 # tracks: https://projects.archlinux.org/svntogit/packages.git/log/trunk?h=packages/linux
 
 pkgname=linux-linode
-_basekernel=3.18
+_basekernel=3.19
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.7
+pkgver=${_basekernel}.4
 pkgrel=1
 arch=('x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
@@ -15,28 +15,29 @@ makedepends=(xmlto docbook-xsl kmod inetutils bc 'gcc>=4.9.0')
 options=('!strip')
 _ckpatchversion=1
 _ckpatchname="patch-${_basekernel}-ck${_ckpatchversion}"
-_bfqpath="http://algo.ing.unimo.it/people/paolo/disk_sched/patches/3.18.0-v7r6"
+_bfqver="v7r7"
+_bfqpath="http://algo.ing.unimo.it/people/paolo/disk_sched/patches/${_basekernel}.0-${_bfqver}"
 _gcc_patch="enable_additional_cpu_optimizations_for_gcc_v4.9+_kernel_v3.15+.patch"
 source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         "https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.sign"
         "https://www.kernel.org/pub/linux/kernel/v3.x/patch-${pkgver}.xz"
-        "${_bfqpath}/0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r6-3.18.patch"
-        "${_bfqpath}/0002-block-introduce-the-BFQ-v7r6-I-O-sched-for-3.18.patch"
-        "${_bfqpath}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r6-for-3.18.0.patch"
-        "http://ck.kolivas.org/patches/3.0/${_basekernel}/${_basekernel}-ck${_ckpatchversion}/${_ckpatchname}.bz2"
+        "${_bfqpath}/0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfqver}-${_basekernel}.patch"
+        "${_bfqpath}/0002-block-introduce-the-BFQ-${_bfqver}-I-O-sched-for-${_basekernel}.patch"
+        "${_bfqpath}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfqver}-for-${_basekernel}.0.patch"
+        "http://ck.kolivas.org/patches/3.0/${_basekernel}/${_basekernel}-ck${_ckpatchversion}/${_ckpatchname}.xz"
         "http://repo-ck.com/source/gcc_patch/${_gcc_patch}.gz"
         'config'
         'menu.lst'
         'preset')
-sha512sums=('2f0b72466e9bc538a675738aa416573d41bbbd7e3e2ffd5b5b127afde609ebc278cec5a3c37e73479607e957c13f1b4ed9782a3795e0dcc2cf8e550228594009'
+sha512sums=('d77bfd9b1cd524ac50bb5a93808955be2f9bcd2ec0badcc8aa6a63401e212f891fd14bd27c6441174ba5d70ab875b9e76c7ebc95f046e31aff1d40790d30351c'
             'SKIP'
-            'a63f56818a3d16f7e39b9967ed751fd6f49837668d533e32ae5bbad7f834e0f3641d9829c27acaf7e65b10581dd1e7d15a05127550627edcd7f9ec7fb5780600'
-            '58b7aa96279ac5989a74f5eb63bd6b2c827bb29a981452617cacc3b5fd5d84b22f65af07573fa38cd3bb7ca0e2c0965290f458317e2988744b90bd1e29a43f04'
-            '2ddaa3c6ff9490016becedf241b8522edcbcadc80f7652478270d94a12ac8ee9dc8f47ad7fd19f7fcc3f21f70a492ad5aab548370f3994c402bdb3c1d79373df'
-            '5a2c76366eefd263f18f484ab3921cbb140c62d4636d1703523e329a3b893d4c310dd7bf0f04b9953313bc7c83fd4b3e562b4edd9bd09797b7e57d87d69dc6cc'
-            'c1ffbbc641cf9ef3c666a1fe5ddff1ab9ed02eb2d8d229d5ce4c11487609ef81beee456c211a658355c2061a108042929b9ad62914395a22077754ade4eb6a23'
-            'bdf5fbd0f7b674be9e4c5004d54bd91c7cc82f80b0ad2c534b62bd39b52b1ad6a2694bd645a208dcd1eb1e03e64d60e71bf605e096c69e497cdeda00534cbcc7'
-            '462780c9a25b47cabd5e9e5a7887d0490ab8bbd63fff9f6c744cb82309a31223479c405225b6bd3b1faa0e7895863ad02c9e97b06486bc6b2a990500926ce90b'
+            '44b2e813d559271a1b41b4f55feab5baee597ec9abf3d8abaf8ed77501fb8cfd6f02da80be35565a87ce1921df59fcf127718ae3ec6947369ccf9bbd16a3a988'
+            'a4f9b4cc5ac85d3bf9b8a3420fd550bf1361d24f1314953d7c073f07a4d008ee5bfcadafba28bd57aa7228857392c131af12a0804da256bc98cfd9462112051e'
+            '04cd37e2043c32e27406720a12212227fd307c67024e27127386e9c6f20e8fdd04c1a423b334cc41868dac935de0c8e59ef2220bddbb4b1e47f4e6c115bf0091'
+            '5298979067a41dc6506a08664ef70fc3d9ef5155a1ac6a7cc65e050282498d3451aa3077028c05d97e9467ee7d083ce45606ab2582558a26a2cc95c8b6cbfa81'
+            'e8d172b93597ad9023c00e07d6825ace8cb5bf421c7b8b77941262c95908dbe3129a7dfe6215dcd34b92f5e08cf7c58571b6b166aee24c1f9807fe74963b3806'
+            '76bf6a9f22b023ab8f780884f595dac1801d150ecd94f88da229c5c9ea98d2c3ef8add01ff7e18e4cbbfa5e6e9c022c4042ee62c779a8485203c1b0e082b8ccc'
+            '3dd8d8f559d03d23ae0bfd98a54ffb5b3295ae69585938fcc944d4e5da04be557760743644dfd8b7c907cde98ddca9e9bf34568cb44a1c421c40e39f6ae9d598'
             '0ddff435474213f6c6e62576b6b3042aeffd1df84c47ca6195714a92c2655c33c56ce211c14934f4268afdf246077e1ea04e0958efc263c71aabfb497481022c'
             'a0a78831075336edef0a8faa34fa550986c3c4d89a89f4f39d798da0211129dc90257d162bec2cdefabef2eb5886a710e70c72074b2f3016788861d05d1e2a1f')
 validpgpkeys=(
@@ -107,7 +108,6 @@ package_linux-linode() {
     -e "s|default_image=.*|default_image=\"/boot/initramfs-${pkgname}.img\"|" \
     -e "s|fallback_image=.*|fallback_image=\"/boot/initramfs-${pkgname}-fallback.img\"|" \
     -i "${pkgdir}/etc/mkinitcpio.d/${pkgname}.preset"
-  find "${pkgdir}" -name '*.ko' -exec gzip -9 {} \;
 
   emdir="extramodules-${_basekernel}${_kernelname:--ARCH}"
   mkdir -p "${pkgdir}/lib/modules/${emdir}"
