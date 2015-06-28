@@ -3,10 +3,10 @@
 # tracks: https://projects.archlinux.org/svntogit/packages.git/log/trunk?h=packages/linux
 
 pkgname=linux-linode
-_basekernel=3.19
+_basekernel=4.0
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.4
+pkgver=${_basekernel}.6
 pkgrel=1
 arch=('x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
@@ -15,30 +15,30 @@ makedepends=(xmlto docbook-xsl kmod inetutils bc 'gcc>=4.9.0')
 options=('!strip')
 _ckpatchversion=1
 _ckpatchname="patch-${_basekernel}-ck${_ckpatchversion}"
-_bfqver="v7r7"
+_bfqver="v7r8"
 _bfqpath="http://algo.ing.unimo.it/people/paolo/disk_sched/patches/${_basekernel}.0-${_bfqver}"
 _gcc_patch="enable_additional_cpu_optimizations_for_gcc_v4.9+_kernel_v3.15+.patch"
-source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
-        "https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.sign"
-        "https://www.kernel.org/pub/linux/kernel/v3.x/patch-${pkgver}.xz"
+source=("https://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar."{xz,sign}
+        "https://www.kernel.org/pub/linux/kernel/v4.x/patch-${pkgver}."{xz,sign}
         "${_bfqpath}/0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfqver}-${_basekernel}.patch"
         "${_bfqpath}/0002-block-introduce-the-BFQ-${_bfqver}-I-O-sched-for-${_basekernel}.patch"
         "${_bfqpath}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfqver}-for-${_basekernel}.0.patch"
-        "http://ck.kolivas.org/patches/3.0/${_basekernel}/${_basekernel}-ck${_ckpatchversion}/${_ckpatchname}.xz"
+        "http://ck.kolivas.org/patches/4.0/${_basekernel}/${_basekernel}-ck${_ckpatchversion}/${_ckpatchname}.bz2"
         "http://repo-ck.com/source/gcc_patch/${_gcc_patch}.gz"
         'config'
         'menu.lst'
         'preset')
-sha512sums=('d77bfd9b1cd524ac50bb5a93808955be2f9bcd2ec0badcc8aa6a63401e212f891fd14bd27c6441174ba5d70ab875b9e76c7ebc95f046e31aff1d40790d30351c'
+sha512sums=('ce13d2c1c17908fd9a4aa42bb6348a0cb13dd22e560bd54c61b8bfdf62726d6095f130c59177a2fe4793b7dc399481bf10d3556d1d571616000f180304e5a995'
             'SKIP'
-            '44b2e813d559271a1b41b4f55feab5baee597ec9abf3d8abaf8ed77501fb8cfd6f02da80be35565a87ce1921df59fcf127718ae3ec6947369ccf9bbd16a3a988'
-            'a4f9b4cc5ac85d3bf9b8a3420fd550bf1361d24f1314953d7c073f07a4d008ee5bfcadafba28bd57aa7228857392c131af12a0804da256bc98cfd9462112051e'
-            '04cd37e2043c32e27406720a12212227fd307c67024e27127386e9c6f20e8fdd04c1a423b334cc41868dac935de0c8e59ef2220bddbb4b1e47f4e6c115bf0091'
-            '5298979067a41dc6506a08664ef70fc3d9ef5155a1ac6a7cc65e050282498d3451aa3077028c05d97e9467ee7d083ce45606ab2582558a26a2cc95c8b6cbfa81'
-            'e8d172b93597ad9023c00e07d6825ace8cb5bf421c7b8b77941262c95908dbe3129a7dfe6215dcd34b92f5e08cf7c58571b6b166aee24c1f9807fe74963b3806'
+            'fc0a1d7e0d09c189066b3df2bf8a8ea7f9a7e84526ef9bef7e894ada9a198877f1bfdfa250f06a10d4208dcee54890182d824f953a873a055e92383307529f53'
+            'SKIP'
+            '1a08e834c4e90a7f9da77460bda1ed0efa9b331811521520402b0d094de3a1155d6e7ddbcbfcbefeef92b5468c56960750f6568cd73114a2a87a9d8a39a63fe8'
+            '46cb51684ca5fd9ba9460c8a62be22e99169de1b5e87ac47f9782f52123993de61fe9563ffec062a9b7c2024d08b1d5f57e09a09dbd7841faa3d149f346f5464'
+            '879ab2364ae09993f8dcd17f3c44584967cf26d26f8376611a9eb7824cf78cadf4cdae58d18f3b493d0ec48395888f1ca1395563e52501dc79f559369c931371'
+            '97f392e0bed2e6622aed7eb344f0ed499bb58ee118e62e28b67080df6ef02c7b874596e70d7db970a2f58f9f94faa3406c8a29eb5f6871ddc8d290ecd6aaf0b5'
             '76bf6a9f22b023ab8f780884f595dac1801d150ecd94f88da229c5c9ea98d2c3ef8add01ff7e18e4cbbfa5e6e9c022c4042ee62c779a8485203c1b0e082b8ccc'
-            '3dd8d8f559d03d23ae0bfd98a54ffb5b3295ae69585938fcc944d4e5da04be557760743644dfd8b7c907cde98ddca9e9bf34568cb44a1c421c40e39f6ae9d598'
-            '0ddff435474213f6c6e62576b6b3042aeffd1df84c47ca6195714a92c2655c33c56ce211c14934f4268afdf246077e1ea04e0958efc263c71aabfb497481022c'
+            'a5e480a7f5f7e6aedf84ece3701fda7bf0c3487dadd1695179a12e5818e153eae3d3515035a6e06eaacfb039b26b080f2134900e07d9b3a3639f6b23092a069a'
+            '810e1e1cd67b172f29db6c1a3caed8050bb3ff86db1d49abcebd76b5ea70622deefb587cc914d1819df78525ce433564f71533822244a286373fc0f7605e6dde'
             'a0a78831075336edef0a8faa34fa550986c3c4d89a89f4f39d798da0211129dc90257d162bec2cdefabef2eb5886a710e70c72074b2f3016788861d05d1e2a1f')
 validpgpkeys=(
               'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linux Torvalds

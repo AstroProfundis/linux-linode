@@ -11,3 +11,5 @@ pkg/
 *.sig
 linux-*.tar.sign
 patch-*.sign
+*.src.tar.gz
+*.src.tar.gz.sig
