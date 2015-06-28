@@ -6,7 +6,7 @@ pkgname=linux-linode
 _basekernel=3.19
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.4
+pkgver=${_basekernel}.8
 pkgrel=1
 arch=('x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
@@ -31,7 +31,7 @@ source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         'preset')
 sha512sums=('d77bfd9b1cd524ac50bb5a93808955be2f9bcd2ec0badcc8aa6a63401e212f891fd14bd27c6441174ba5d70ab875b9e76c7ebc95f046e31aff1d40790d30351c'
             'SKIP'
-            '44b2e813d559271a1b41b4f55feab5baee597ec9abf3d8abaf8ed77501fb8cfd6f02da80be35565a87ce1921df59fcf127718ae3ec6947369ccf9bbd16a3a988'
+            '29c63beaab43493093a002c29d979e999d11f44eb5465b887ddf75313cd7755d20b3ea19ac1ef68ae586fb4e5275817bfe56d1dfba930ffaabd618702541aebb'
             'a4f9b4cc5ac85d3bf9b8a3420fd550bf1361d24f1314953d7c073f07a4d008ee5bfcadafba28bd57aa7228857392c131af12a0804da256bc98cfd9462112051e'
             '04cd37e2043c32e27406720a12212227fd307c67024e27127386e9c6f20e8fdd04c1a423b334cc41868dac935de0c8e59ef2220bddbb4b1e47f4e6c115bf0091'
             '5298979067a41dc6506a08664ef70fc3d9ef5155a1ac6a7cc65e050282498d3451aa3077028c05d97e9467ee7d083ce45606ab2582558a26a2cc95c8b6cbfa81'
