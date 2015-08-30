@@ -7,7 +7,7 @@ _basekernel=4.0
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
 pkgver=${_basekernel}.6
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
 license=(GPL2)
@@ -24,6 +24,8 @@ source=("https://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar."{xz,sign}
         "${_bfqpath}/0002-block-introduce-the-BFQ-${_bfqver}-I-O-sched-for-${_basekernel}.patch"
         "${_bfqpath}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfqver}-for-${_basekernel}.0.patch"
         "http://ck.kolivas.org/patches/4.0/${_basekernel}/${_basekernel}-ck${_ckpatchversion}/${_ckpatchname}.bz2"
+        "http://ck.kolivas.org/patches/bfs/4.0/4.0/pending/bfs462-rtmn-fix.patch"
+        "http://ck.kolivas.org/patches/bfs/4.0/4.0/pending/bfs462-update_inittask.patch"
         "http://repo-ck.com/source/gcc_patch/${_gcc_patch}.gz"
         'config'
         'menu.lst'
@@ -36,6 +38,8 @@ sha512sums=('ce13d2c1c17908fd9a4aa42bb6348a0cb13dd22e560bd54c61b8bfdf62726d6095f
             '46cb51684ca5fd9ba9460c8a62be22e99169de1b5e87ac47f9782f52123993de61fe9563ffec062a9b7c2024d08b1d5f57e09a09dbd7841faa3d149f346f5464'
             '879ab2364ae09993f8dcd17f3c44584967cf26d26f8376611a9eb7824cf78cadf4cdae58d18f3b493d0ec48395888f1ca1395563e52501dc79f559369c931371'
             '97f392e0bed2e6622aed7eb344f0ed499bb58ee118e62e28b67080df6ef02c7b874596e70d7db970a2f58f9f94faa3406c8a29eb5f6871ddc8d290ecd6aaf0b5'
+            '47e4134fa35a1596b390bdc7eadc59b75b88594e84b54a71a0fd7886bbef083c174ca5627bd2a899966eddd35b676df735b0304e737218040ab8edf72f333ef2'
+            '623c4fc879b6bb17f1640caa268bf19cf65fbfa6c5910bbb5fdd44f1013913e5728d80fa037f33288a08ac56a23ee326951a15822a871dee2fb3d775ced9357e'
             '76bf6a9f22b023ab8f780884f595dac1801d150ecd94f88da229c5c9ea98d2c3ef8add01ff7e18e4cbbfa5e6e9c022c4042ee62c779a8485203c1b0e082b8ccc'
             'a5e480a7f5f7e6aedf84ece3701fda7bf0c3487dadd1695179a12e5818e153eae3d3515035a6e06eaacfb039b26b080f2134900e07d9b3a3639f6b23092a069a'
             '810e1e1cd67b172f29db6c1a3caed8050bb3ff86db1d49abcebd76b5ea70622deefb587cc914d1819df78525ce433564f71533822244a286373fc0f7605e6dde'
@@ -66,6 +70,8 @@ prepare() {
   sed -i -re "s/^(.EXTRAVERSION).*$/\1 = /" "${srcdir}/${_ckpatchname}"
   msg "Patching source with ck1 including BFS"
   patch -Np1 -i "${srcdir}/${_ckpatchname}"
+  patch -Np1 -i "${srcdir}/bfs462-rtmn-fix.patch"
+  patch -Np1 -i "${srcdir}/bfs462-update_inittask.patch"
 
   # Patch source to enable more gcc CPU optimizatons via the make nconfig
   patch -Np1 -i "${srcdir}/${_gcc_patch}"
