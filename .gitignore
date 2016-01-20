@@ -6,9 +6,10 @@ pkg/
 *.bz2
 *.gz
 *.log
-*.patch
 *.asc
 *.sig
+*.patch
+!cve*.patch
 linux-*.tar.sign
 patch-*.sign
 *.src.tar.gz
