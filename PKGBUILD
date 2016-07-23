@@ -3,40 +3,40 @@
 # tracks: https://projects.archlinux.org/svntogit/packages.git/log/trunk?h=packages/linux
 
 pkgname=linux-linode
-_basekernel=4.3
+_basekernel=4.5
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.3
-pkgrel=2
+pkgver=${_basekernel}.7
+pkgrel=1
 arch=('x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
 license=(GPL2)
 makedepends=(xmlto docbook-xsl kmod inetutils bc 'gcc>=4.9.0')
 options=('!strip')
-_ckpatchversion=3
+_ckpatchversion=1
 _ckpatchname="patch-${_basekernel}-ck${_ckpatchversion}"
-_bfqver="v7r8"
+_bfqver="v7r11"
 _bfqpath="http://algo.ing.unimo.it/people/paolo/disk_sched/patches/${_basekernel}.0-${_bfqver}"
 _gcc_patch="enable_additional_cpu_optimizations_for_gcc_v4.9+_kernel_v3.15+.patch"
 source=("https://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar."{xz,sign}
         "https://www.kernel.org/pub/linux/kernel/v4.x/patch-${pkgver}."{xz,sign}
-        "${_bfqpath}/0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfqver}-${_basekernel}.patch"
-        "${_bfqpath}/0002-block-introduce-the-BFQ-${_bfqver}-I-O-sched-for-${_basekernel}.patch"
-        "${_bfqpath}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfqver}-for-${_basekernel}.0.patch"
+        "${_bfqpath}/0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfqver}-${_basekernel}.0.patch"
+        "${_bfqpath}/0002-block-introduce-the-BFQ-${_bfqver}-I-O-sched-for-${_basekernel}.0.patch"
+        "${_bfqpath}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfqver}-for.patch"
         "http://ck.kolivas.org/patches/4.0/${_basekernel}/${_basekernel}-ck${_ckpatchversion}/${_ckpatchname}.xz"
         "http://repo-ck.com/source/gcc_patch/${_gcc_patch}.gz"
         'config'
         'menu.lst'
         'preset'
         'cve-2016-0728-fix.patch')
-sha512sums=('d25812043850530fdcfdb48523523ee980747f3c2c1266149330844dae2cba0d056d4ddd9c0f129f570f5d1f6df5c20385aec5f6a2e0755edc1e2f5f93e2c6bc'
+sha512sums=('cb0d5f30baff37dfea40fbc1119a1482182f95858c883e019ee3f81055c8efbdb9dba7dfc02ebcc4216db38f03ece58688e69efc0fce1dade359af30bd5426de'
             'SKIP'
-            '1b9cc343a589a7cdaa66284b3d7129be9869195f5b839dac0222050af42dc7a7451d4e2bf176c1a9939d6572a44a9b6f4534b0c7a79032881a9bc8f8f56c9c69'
+            '948fb18128eacf421ae92fc466bc395b4a0fd7bb514afb52b910f0f860dbc56cb6318ae604082892d93e293cc9987cf61177b1280c79474533f0d0f7113682f5'
             'SKIP'
-            'e31394f8addbfa7d46eaa6ebf4b848a0f13cbfc8d41f3741d2512c7728db839fa67f1a138cc0b5b88a85f0b7c285522e166ad2e349bebd9f4c3f4a187235b6e3'
-            '593c8217c83a46faffa2b0639b3b8a17fd2cd68c160d716e9a931c6e114300384f68f6e98bb50a99d17bf3343ff694ce3edca627505813bb08a37f67ba525eee'
-            '76e63b7c983d695a420fbe58a5d29063722a413a540160e63789d4dc4d6ac59c8cd15a6583ee4c8bcef965ab9512d4e69a4c1dac207bbe954b49f7356c90bdf4'
-            'f13dd22d44ec51b03f9213ea7e75262197c9e9057d1acc7c2648ad802321a59b93dc2be75e402978d972dd2fa450699076cd51387ada928db93c4693ca9f960d'
+            'f15460f31c3401356c29459ff880be4c14f468a568c7cf75af162219ace9ddef79499cc6817289c019915bc5af7dd680485def1a4fe4786856dd47390e7f661e'
+            '11adc1e6cd3dae38c632f7a3c8c203a9cd13b504e315360caa41bc28677b60e6744890fffe32b42d09251b0a66e89f3c961feb6fb78ad27d10b71ab22cfde6ce'
+            '85a0bce1a709c595028c98364f154768835d3bb98395625c9a83eff91e3b4e7ff9f600d672d1eb91bd54eedd4a8239c6dba27bc3758b2e22dd69dc2addd29ed0'
+            '346860832a1e6a54baedd81033b327707cb5b249cb87620e3f5579cc0b5ec8534a65fcf2f2ed63675ae500962772e4e7d4f8087a9309279cab4d6f87850d82c9'
             '62fdd5c0a060a051b64093d71fbb028781061ccb7a28c5b06739a0b24dac0945740d9b73ff170784f60005a589774bcc14f56523ec51557eb3a677f726ec34cf'
             '1d9bf4cbdff6c1b9e9a12654dc8c457762d64efacaab7b611525e59916b40d49fd93426f798d86d7d7eacef7744019380789b384ccc83b6df97919f031b29ecf'
             '2beaa01dc9679a66ccbbca0f4abeb0f77956651e3f83f114030b2ef344a16240124a549ccee2588b6a1179be6a66b4a8dc931e2c15c4d5282afeb85bb6ada210'
