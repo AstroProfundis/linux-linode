@@ -27,8 +27,7 @@ source=("https://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar."{xz,sign}
         "http://repo-ck.com/source/gcc_patch/${_gcc_patch}.gz"
         'config'
         'menu.lst'
-        'preset'
-        'cve-2016-0728-fix.patch')
+        'preset')
 sha512sums=('cb0d5f30baff37dfea40fbc1119a1482182f95858c883e019ee3f81055c8efbdb9dba7dfc02ebcc4216db38f03ece58688e69efc0fce1dade359af30bd5426de'
             'SKIP'
             '948fb18128eacf421ae92fc466bc395b4a0fd7bb514afb52b910f0f860dbc56cb6318ae604082892d93e293cc9987cf61177b1280c79474533f0d0f7113682f5'
@@ -40,8 +39,7 @@ sha512sums=('cb0d5f30baff37dfea40fbc1119a1482182f95858c883e019ee3f81055c8efbdb9d
             '62fdd5c0a060a051b64093d71fbb028781061ccb7a28c5b06739a0b24dac0945740d9b73ff170784f60005a589774bcc14f56523ec51557eb3a677f726ec34cf'
             '1d9bf4cbdff6c1b9e9a12654dc8c457762d64efacaab7b611525e59916b40d49fd93426f798d86d7d7eacef7744019380789b384ccc83b6df97919f031b29ecf'
             '2beaa01dc9679a66ccbbca0f4abeb0f77956651e3f83f114030b2ef344a16240124a549ccee2588b6a1179be6a66b4a8dc931e2c15c4d5282afeb85bb6ada210'
-            'a0a78831075336edef0a8faa34fa550986c3c4d89a89f4f39d798da0211129dc90257d162bec2cdefabef2eb5886a710e70c72074b2f3016788861d05d1e2a1f'
-            '21daef6e568c94a611bff8d76b18c54b46ca84f3036c7d92cad6719422d993c90678e4846cb7bd96fe4dae9635f3114332bf1cd565360265d7d9029a10a0f016')
+            'a0a78831075336edef0a8faa34fa550986c3c4d89a89f4f39d798da0211129dc90257d162bec2cdefabef2eb5886a710e70c72074b2f3016788861d05d1e2a1f')
 validpgpkeys=(
               'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linux Torvalds
               '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
@@ -72,14 +70,11 @@ prepare() {
   # Patch source to enable more gcc CPU optimizatons via the make nconfig
   patch -Np1 -i "${srcdir}/${_gcc_patch}"
 
-  patch -Np1 -i "${srcdir}/cve-2016-0728-fix.patch"
-
   # Clean tree and copy ARCH config over
   msg "Running make mrproper to clean source tree"
   make mrproper
 
   cat "${srcdir}/config" > ./.config
-
   sed -i '2iexit 0' scripts/depmod.sh
   sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"${_kernelname}\"|g" ./.config
   sed -i "s|CONFIG_LOCALVERSION_AUTO=.*|CONFIG_LOCALVERSION_AUTO=n|g" ./.config
