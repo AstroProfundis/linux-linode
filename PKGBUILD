@@ -7,7 +7,7 @@ _basekernel=4.5
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
 pkgver=${_basekernel}.7
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
 license=(GPL2)
@@ -74,10 +74,10 @@ prepare() {
   msg "Running make mrproper to clean source tree"
   make mrproper
 
-  cat "${srcdir}/config.x86_64" > ./.config.x86_64
+  cat "${srcdir}/config.x86_64" > ./.config
   sed -i '2iexit 0' scripts/depmod.sh
-  sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"${_kernelname}\"|g" ./.config.x86_64
-  sed -i "s|CONFIG_LOCALVERSION_AUTO=.*|CONFIG_LOCALVERSION_AUTO=n|g" ./.config.x86_64
+  sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"${_kernelname}\"|g" ./.config
+  sed -i "s|CONFIG_LOCALVERSION_AUTO=.*|CONFIG_LOCALVERSION_AUTO=n|g" ./.config
   sed -ri "s|^(EXTRAVERSION =).*|\1 -${pkgrel}|" Makefile
   make prepare
 }
