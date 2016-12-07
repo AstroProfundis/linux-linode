@@ -7,7 +7,7 @@ _basekernel=4.8
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
 pkgver=${_basekernel}.12
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
 license=(GPL2)
@@ -39,7 +39,7 @@ validpgpkeys=(
 pkgdesc="Kernel for Linode servers, with ck patchset"
 depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
 provides=(linux)
-conflicts=(grub grub-legacy)
+conflicts=(grub-legacy)
 backup=(etc/mkinitcpio.d/${pkgname}.preset boot/grub/menu.lst)
 install=install
 
