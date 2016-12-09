@@ -7,7 +7,7 @@ _basekernel=4.8
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
 pkgver=${_basekernel}.12
-pkgrel=2
+pkgrel=3
 arch=('x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
 license=(GPL2)
@@ -20,6 +20,7 @@ source=("https://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar."{xz,sign}
         "https://www.kernel.org/pub/linux/kernel/v4.x/patch-${pkgver}."{xz,sign}
         "http://ck.kolivas.org/patches/4.0/${_basekernel}/${_basekernel}-ck${_ckpatchversion}/${_ckpatchname}.xz"
         "http://repo-ck.com/source/gcc_patch/${_gcc_patch}.gz"
+        'net_handle_no_dst_on_skb_in_icmp6_send.patch'
         'config.x86_64'
         'menu.lst'
         'preset')
@@ -29,6 +30,7 @@ sha512sums=('a48a065f21e1c7c4de4cf8ca47b8b8d9a70f86b64e7cfa6e01be490f78895745b9c
             'SKIP'
             '988dc2aabd370c5b47f7ec30caf73491abea7597ab9361bb9d09d463d58efe0c71f2363d77e040782af1dc8aacb22eea445e3c9cac010587632c3f7efb894e43'
             '8e8f407262f3f573654e7f0fceec6075fd2da0258a384206d28e5f59698168609e575f3d855adb8bb476b0684da409dab22f7ddc0f00e9c10c67debe4409c30b'
+            'c53bd47527adbd2599a583e05a7d24f930dc4e86b1de017486588205ad6f262a51a4551593bc7a1218c96541ea073ea03b770278d947b1cd0d2801311fcc80e5'
             '8877dd9c560a56fdfdf01c12a7fa450099bf30f1b5ccad2d57428df02de699d91fa222439977763caf2c3752e6dadd68684af3a5bc0603da50c92514f728041a'
             '9104c51ff60d5a3865c2e8966d2447e4b225a9f4ac2b1c7bfee1552d59a85ca88325482810abcc8d92bf381ec60daa4518c074a139d07a91a954ee14da20c359'
             'a0a78831075336edef0a8faa34fa550986c3c4d89a89f4f39d798da0211129dc90257d162bec2cdefabef2eb5886a710e70c72074b2f3016788861d05d1e2a1f')
@@ -46,6 +48,7 @@ install=install
 prepare() {
   cd "${srcdir}/${_srcname}"
   patch -p1 -i "${srcdir}/patch-${pkgver}"
+  patch -p1 -i "${srcdir}/net_handle_no_dst_on_skb_in_icmp6_send.patch"
 
   # patch source with ck patchset
   # fix double name in EXTRAVERSION
