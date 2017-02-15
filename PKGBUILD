@@ -6,7 +6,7 @@ pkgname=linux-linode
 _basekernel=4.9
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.0
+pkgver=${_basekernel}.9
 pkgrel=1
 arch=('x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
@@ -17,7 +17,7 @@ _ckpatchversion=1
 _ckpatchname="patch-${_basekernel}-ck${_ckpatchversion}"
 _gcc_patch="enable_additional_cpu_optimizations_for_gcc_v4.9+_kernel_v3.15+.patch"
 source=("https://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar."{xz,sign}
-        #"https://www.kernel.org/pub/linux/kernel/v4.x/patch-${pkgver}."{xz,sign}
+        "https://www.kernel.org/pub/linux/kernel/v4.x/patch-${pkgver}."{xz,sign}
         "http://ck.kolivas.org/patches/4.0/${_basekernel}/${_basekernel}-ck${_ckpatchversion}/${_ckpatchname}.xz"
         "http://repo-ck.com/source/gcc_patch/${_gcc_patch}.gz"
         'config.x86_64'
@@ -25,9 +25,11 @@ source=("https://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar."{xz,sign}
         'preset')
 sha512sums=('bf67ff812cc3cb7e5059e82cc5db0d9a7c5637f7ed9a42e4730c715bf7047c81ed3a571225f92a33ef0b6d65f35595bc32d773356646df2627da55e9bc7f1f1a'
             'SKIP'
+            'a7a2d44b83b00b20f1424d12af0f42e1c576d3053feacd13491ef185661fb1c789b9265c500b62f5ede39f57b72f358820000fa6c852a5f035e566ee1dfcd5d9'
+            'SKIP'
             '335f83b8f77c4c2c304db74268eae895ec53611b2cb5ed45a9c6e7f9c7ac37c2eba7cc714d49504ae29cc44c448aa873b52eb332fe91d4e6dbbdd2a175aab252'
-            '8e8f407262f3f573654e7f0fceec6075fd2da0258a384206d28e5f59698168609e575f3d855adb8bb476b0684da409dab22f7ddc0f00e9c10c67debe4409c30b'
-            'c29b87b104e7adc908b60b4ecf46c0e540fb2a7be946823e886ca95e24589aaf913a4ec1cdea90b392c56336dcc330532877a7aa2b16c03f84ae82ed03ede790'
+            'ab781ca0315316043d2074ad925288616ff4935e0c91b09090cd2a2cc392845eddf1c93b5dadda0eb434050459b51a4e2587e5099e6a9204d0d13b7f427d399c'
+            'e30f2f85b3e07aeebf25bed4f1fa556e0efc31919ba25840abb40cfb54cf39100502430ae03997c10d397174511ba03844ac7b9774ab5f6af15fca3ef9f16cd0'
             '9104c51ff60d5a3865c2e8966d2447e4b225a9f4ac2b1c7bfee1552d59a85ca88325482810abcc8d92bf381ec60daa4518c074a139d07a91a954ee14da20c359'
             'a0a78831075336edef0a8faa34fa550986c3c4d89a89f4f39d798da0211129dc90257d162bec2cdefabef2eb5886a710e70c72074b2f3016788861d05d1e2a1f')
 validpgpkeys=(
@@ -43,7 +45,7 @@ install=install
 
 prepare() {
   cd "${srcdir}/${_srcname}"
-  #patch -p1 -i "${srcdir}/patch-${pkgver}"
+  patch -p1 -i "${srcdir}/patch-${pkgver}"
 
   # patch source with ck patchset
   # fix double name in EXTRAVERSION
