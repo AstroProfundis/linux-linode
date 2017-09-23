@@ -10,7 +10,9 @@ pkg/
 *.diff
 *.asc
 *.sig
+*.last
 linux-*.tar.sign
 patch-*.sign
 *.src.tar.gz
 *.src.tar.gz.sig
+linux-stable/
