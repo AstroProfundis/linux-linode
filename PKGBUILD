@@ -3,21 +3,22 @@
 # tracks: https://projects.archlinux.org/svntogit/packages.git/log/trunk?h=packages/linux
 
 pkgbase=linux-linode
-_basekernel=4.13
+_basekernel=4.14
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.6
+pkgver=${_basekernel}.3
 pkgrel=1
 arch=('x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
 license=(GPL2)
 makedepends=(xmlto docbook-xsl kmod inetutils bc libelf)
 options=('!strip')
-#_ckpatchversion=1
-#_ckpatchname="patch-${_basekernel}-ck${_ckpatchversion}"
+_ckpatchversion=1
+_ckpatchname="patch-${_basekernel}-ck${_ckpatchversion}"
 _gcc_patch="enable_additional_cpu_optimizations_for_gcc_v4.9+_kernel_v4.13+.patch"
 source=("https://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar."{xz,sign}
         "https://www.kernel.org/pub/linux/kernel/v4.x/patch-${pkgver}."{xz,sign}
+	"http://ck.kolivas.org/patches/4.0/${_basekernel}/${_basekernel}-ck${_ckpatchversion}/${_ckpatchname}.xz"
 	"https://raw.githubusercontent.com/graysky2/kernel_gcc_patch/master/${_gcc_patch}"
 	"https://raw.githubusercontent.com/dolohow/uksm/master/uksm-${_basekernel}.patch"
         'config'
@@ -26,13 +27,14 @@ source=("https://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar."{xz,sign}
         '99-grub-ll.hook'
         'menu.lst'
         'preset')
-sha512sums=('a557c2f0303ae618910b7106ff63d9978afddf470f03cb72aa748213e099a0ecd5f3119aea6cbd7b61df30ca6ef3ec57044d524b7babbaabddf8b08b8bafa7d2'
+sha512sums=('77e43a02d766c3d73b7e25c4aafb2e931d6b16e870510c22cef0cdb05c3acb7952b8908ebad12b10ef982c6efbe286364b1544586e715cf38390e483927904d8'
             'SKIP'
-            '40e111f3969b622f982bfb75f8c35aa59d9989a627a4511d8e0090b0c7bbcafcc90567434f5166ef2d17831f0beddb52762107e523414523e1877f67f66ca3f7'
+            '36a08a4c1c93c4fefb95273f3bfe4cac724d8e7c4f90d6e42a11c3afbbdd35b537f3380985a730c9aca491359f9bbdc4747ac444dd6b2625443c28df285cf74a'
             'SKIP'
+            '5e81d6a8319d030572ad5b6379bc43f2f5f98b6e4f050b1285bd6004516d1bf2e8eee8d3425a09317e15309cf030da2534417265b474aaab80e72e22c04741a2'
             '5ca7ae20245a54caa71fb570d971d6872d4e888f35c6123b93fbca16baf9a0e2500d6ec931f3906e4faecaaca9cad0d593694d9cab617efd0cb7b5fc09c0fa48'
-            '632c37449c088141dbed4e745c252849396a305a03a86349080a58fb14d7fcd3488f306b890a082a334dab878e179889dfaae0423dfe3d125f48804847abbb39'
-            'dc551ef6da8f10b8fbe7da304db6fb173f66730550c0c5b9e070405471c4f3e057bd98c2de5d0d7ceac3e16afd572b38fa14357e49a70f0c56193c35f7e7ad85'
+            '44b31276d4d712e4e1e1455e128daa079ddd9d72a4620289607faf6134a225737004e8742de79e0283e98ef2d4f746f075e041870d37eab191c93c566f945c7f'
+            'afe1637079bb8bbbe34bd42cb3cf5c7f1e94773d19c348b441944ac98c9118151589b2446e7c24bf18834c2693a576db8b9a33348b3799d4796be4c3d42ff612'
             '7a80f858c32a9dd62f43aba0b7119a1196869216117164bcde24ab46022e8a1bbe27821faa26ca690a1633a5a9fe324e98e5cdf14f37591d569cbc71f542482d'
             'c57a6c8d9978cb6a1034bed33ba5e06bef9b134f22113761798d4fa46e8091e7b0bd26f3a14d79122ba780b2f7a93ca26850f4da6a654f81b34cc79c242f683f'
             'db9080b2548e4dcd61eaaf20cd7d37cbbc8c204ce85a2e3408d0671f6b26010f77a61affd2c77e809768714eca29d3afb64765a3f2099317a2c928eff3feb4cf'
@@ -42,7 +44,9 @@ validpgpkeys=(
               'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linux Torvalds
               '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
 )
+pkgdesc="The kernel for Linode servers, with some custom patchsets"
 depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7' 'grub')
+provides=("linux=${pkgver}" "linux-ck=${pkgver}")
 conflicts=(grub-legacy)
 backup=(etc/mkinitcpio.d/${pkgname}.preset boot/grub/menu.lst)
 install=install
@@ -51,31 +55,41 @@ prepare() {
   cd "${srcdir}/${_srcname}"
   patch -p1 -i "${srcdir}/patch-${pkgver}"
 
-  # patch source with ck patchset
-  # fix double name in EXTRAVERSION
-  #sed -i -re "s/^(.EXTRAVERSION).*$/\1 = /" "${srcdir}/${_ckpatchname}"
-  #msg "Patching source with ck pachset incuding BFS"
-  #patch -Np1 -i "${srcdir}/${_ckpatchname}"
+  # fix naming schema in EXTRAVERSION of ck patch set
+  sed -i -re "s/^(.EXTRAVERSION).*$/\1 = /" ../${_ckpatchname}
+
+  # Patch source with ck patchset
+  msg "Applying ck patchset..."
+  patch -Np1 -i ../${_ckpatchname}
 
   # Patch source with UKSM patchset
-  patch -Np1 -i "${srcdir}/uksm-${_basekernel}.patch"
+  msg "Applying UKSM patchset..."
+  patch -Np1 -i ../uksm-${_basekernel}.patch
 
-  # Patch source to enable more gcc CPU optimizatons via the make nconfig
-  patch -Np1 -i "${srcdir}/${_gcc_patch}"
+  # Patch source to unlock additional gcc CPU optimizatons
+  # https://github.com/graysky2/kernel_gcc_patch
+  msg "Enabling additional CPU optimizations..."
+  patch -Np1 -i ../${_gcc_patch}
 
-  # Clean tree and copy ARCH config over
-  msg "Running make mrproper to clean source tree"
   make mrproper
-
   cat "${srcdir}/config" > ./.config
-  sed -i '2iexit 0' scripts/depmod.sh
+
   sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"${_kernelname}\"|g" ./.config
-  sed -i "s|CONFIG_LOCALVERSION_AUTO=.*|CONFIG_LOCALVERSION_AUTO=n|g" ./.config
+  sed -i "s|CONFIG_LOCALVERSION_AUTO=.*|CONFIG_LOCALVERSION_AUTO=n|" ./.config
+
+  # set extraversion to pkgrel
   sed -ri "s|^(EXTRAVERSION =).*|\1 -${pkgrel}|" Makefile
+
+  # don't run depmod on 'make install'. We'll do this ourselves in packaging
+  sed -i '2iexit 0' scripts/depmod.sh
+
   make prepare
 
+  # rewrite configuration
+  yes "" | make config >/dev/null
+
   # save configuration for later reuse
-  cat .config > "${startdir}/config.${CARCH}.last"
+  cat .config > "${startdir}/config.last"
 }
 
 build() {
@@ -87,20 +101,14 @@ build() {
 }
 
 _package() {
-  pkgdesc="The ${pkgbase/linux/Linux} kernel for Linode servers, with some custom patchsets"
-  depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
-  provides=("linux=${pkgver}")
-  backup=("etc/mkinitcpio.d/${pkgbase}.preset")
-  install=install
-
-  KARCH=x86
   cd "${srcdir}/${_srcname}"
   _kernver="$(make LOCALVERSION= kernelrelease)"
-  mkdir -p "${pkgdir}"/{lib/{modules,firmware},boot}
-  make LOCALVERSION= INSTALL_MOD_PATH="${pkgdir}" modules_install
-  rm -rf "${pkgdir}"/lib/{firmware,modules/${_kernver}/{source,build}}
-  cp arch/$KARCH/boot/bzImage "${pkgdir}/boot/vmlinuzll-${pkgname}"
-  install -D -m644 vmlinux "${pkgdir}/lib/modules/${_kernver}/build/vmlinux"
+  emdir="extramodules-${_basekernel}${_kernelname:--ARCH}"
+  mkdir -p "${pkgdir}"/{usr/lib/modules/"$emdir",boot/grub}
+  make LOCALVERSION= INSTALL_MOD_PATH="${pkgdir}/usr" modules_install
+  rm -rf "${pkgdir}"/usr/lib/modules/${_kernver}/{source,build}
+  cp arch/x86/boot/bzImage "${pkgdir}/boot/vmlinuzll-${pkgname}"
+  install -D -m644 vmlinux "${pkgdir}/usr/lib/modules/${_kernver}/build/vmlinux"
   install -D -m644 "${srcdir}/preset" "${pkgdir}/etc/mkinitcpio.d/${pkgname}.preset"
   install -D -m644 "${srcdir}/98-linux-linode.hook" "${pkgdir}/usr/share/libalpm/hooks/98-linux-linode.hook"
   install -D -m644 "${srcdir}/99-grub-ll.hook"      "${pkgdir}/usr/share/libalpm/hooks/99-grub-ll.hook"
@@ -113,149 +121,82 @@ _package() {
     -e "s|default_image=.*|default_image=\"/boot/initramfs-${pkgname}.img\"|" \
     -e "s|fallback_image=.*|fallback_image=\"/boot/initramfs-${pkgname}-fallback.img\"|" \
     -i "${pkgdir}/etc/mkinitcpio.d/${pkgname}.preset"
-
-  emdir="extramodules-${_basekernel}${_kernelname:--ARCH}"
-  mkdir -p "${pkgdir}/lib/modules/${emdir}"
-  ln -s "../${emdir}" "${pkgdir}/lib/modules/${_kernver}/extramodules"
-  echo "${_kernver}" >| "${pkgdir}/lib/modules/${emdir}/version"
-  depmod -b "${pkgdir}" -F System.map "${_kernver}"
-  mkdir -p "${pkgdir}/usr"
-  mv "${pkgdir}/"{lib,usr/}
-  mkdir -p ${pkgdir}/boot/grub
-  sed "s/%VER%/${pkgver}-${pkgrel}/ig" ${srcdir}/menu.lst > ${pkgdir}/boot/grub/menu.lst
+  ln -s "../${emdir}" "${pkgdir}/usr/lib/modules/${_kernver}/extramodules"
+  echo "${_kernver}" >| "${pkgdir}/usr/lib/modules/${emdir}/version"
+  depmod -b "${pkgdir}/usr" -F System.map "${_kernver}"
+  sed "s/%VER%/${pkgver}-${pkgrel}/ig" "${srcdir}/menu.lst" > "${pkgdir}/boot/grub/menu.lst"
 }
 
 _package-headers() {
   pkgdesc="Header files and scripts for building modules for ${pkgbase/linux/Linux} kernel"
+  #_Hpkgdesc="Header files and scripts for building modules for ${pkgbase/linux/Linux} kernel"
+  #pkgdesc="${_Hpkgdesc}"
   depends=('linux-linode') # added to keep kernel and headers packages matched
-  provides=("linux-linode-headers=${pkgver}" "linux-headers=${pkgver}")
+  provides=("linux-ck-headers=${pkgver}" "linux-headers=${pkgver}")
+  #groups=('ck-generic')
 
-  install -dm755 "${pkgdir}/usr/lib/modules/${_kernver}"
+  cd ${_srcname}
+  local _builddir="${pkgdir}/usr/lib/modules/${_kernver}/build"
 
-  cd "${srcdir}/${_srcname}"
-  install -D -m644 Makefile \
-    "${pkgdir}/usr/lib/modules/${_kernver}/build/Makefile"
-  install -D -m644 kernel/Makefile \
-    "${pkgdir}/usr/lib/modules/${_kernver}/build/kernel/Makefile"
-  install -D -m644 .config \
-    "${pkgdir}/usr/lib/modules/${_kernver}/build/.config"
+  install -Dt "${_builddir}" -m644 Makefile .config Module.symvers
+  install -Dt "${_builddir}/kernel" -m644 kernel/Makefile
 
-  mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/include"
+  mkdir "${_builddir}/.tmp_versions"
 
-  for i in acpi asm-generic config crypto drm generated keys linux math-emu \
-    media net pcmcia rdma scsi soc sound trace uapi video xen; do
-    cp -a include/${i} "${pkgdir}/usr/lib/modules/${_kernver}/build/include/"
-  done
+  cp -t "${_builddir}" -a include scripts
 
-  # copy arch includes for external modules
-  mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/arch/x86"
-  cp -a arch/x86/include "${pkgdir}/usr/lib/modules/${_kernver}/build/arch/x86/"
+  install -Dt "${_builddir}/arch/x86" -m644 arch/x86/Makefile
+  install -Dt "${_builddir}/arch/x86/kernel" -m644 arch/x86/kernel/asm-offsets.s
 
-  # copy files necessary for later builds, like nvidia and vmware
-  cp Module.symvers "${pkgdir}/usr/lib/modules/${_kernver}/build"
-  cp -a scripts "${pkgdir}/usr/lib/modules/${_kernver}/build"
+  cp -t "${_builddir}/arch/x86" -a arch/x86/include
 
-  # fix permissions on scripts dir
-  chmod og-w -R "${pkgdir}/usr/lib/modules/${_kernver}/build/scripts"
-  mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/.tmp_versions"
+  install -Dt "${_builddir}/drivers/md" -m644 drivers/md/*.h
+  install -Dt "${_builddir}/net/mac80211" -m644 net/mac80211/*.h
 
-  mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/arch/${KARCH}/kernel"
-
-  cp arch/${KARCH}/Makefile "${pkgdir}/usr/lib/modules/${_kernver}/build/arch/${KARCH}/"
-
-  if [ "${CARCH}" = "i686" ]; then
-    cp arch/${KARCH}/Makefile_32.cpu "${pkgdir}/usr/lib/modules/${_kernver}/build/arch/${KARCH}/"
-  fi
-
-  cp arch/${KARCH}/kernel/asm-offsets.s "${pkgdir}/usr/lib/modules/${_kernver}/build/arch/${KARCH}/kernel/"
-
-  # add dm headers
-  mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/md"
-  cp drivers/md/*.h "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/md"
-
-  # add inotify.h
-  mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/include/linux"
-  cp include/linux/inotify.h "${pkgdir}/usr/lib/modules/${_kernver}/build/include/linux/"
-
-  # add wireless headers
-  mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/net/mac80211/"
-  cp net/mac80211/*.h "${pkgdir}/usr/lib/modules/${_kernver}/build/net/mac80211/"
-
-  # add dvb headers for external modules
-  # in reference to:
   # http://bugs.archlinux.org/task/9912
-  mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/dvb-core"
-  cp drivers/media/dvb-core/*.h "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/dvb-core/"
-  # and...
-  # http://bugs.archlinux.org/task/11194
-  ###
-  ### DO NOT MERGE OUT THIS IF STATEMENT
-  ### IT AFFECTS USERS WHO STRIP OUT THE DVB STUFF SO THE OFFICIAL ARCH CODE HAS A CP
-  ### LINE THAT CAUSES MAKEPKG TO END IN AN ERROR
-  ###
-  if [ -d include/config/dvb/ ]; then
-    mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/include/config/dvb/"
-    cp include/config/dvb/*.h "${pkgdir}/usr/lib/modules/${_kernver}/build/include/config/dvb/"
-  fi
+  install -Dt "${_builddir}/drivers/media/dvb-core" -m644 drivers/media/dvb-core/*.h
 
-  # add dvb headers for http://mcentral.de/hg/~mrec/em28xx-new
-  # in reference to:
   # http://bugs.archlinux.org/task/13146
-  mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/dvb-frontends/"
-  cp drivers/media/dvb-frontends/lgdt330x.h "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/dvb-frontends/"
-  mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/i2c/"
-  cp drivers/media/i2c/msp3400-driver.h "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/i2c/"
+  install -Dt "${_builddir}/drivers/media/i2c" -m644 drivers/media/i2c/msp3400-driver.h
 
-  # add dvb headers
-  # in reference to:
   # http://bugs.archlinux.org/task/20402
-  mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/usb/dvb-usb"
-  cp drivers/media/usb/dvb-usb/*.h "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/usb/dvb-usb/"
-  mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/dvb-frontends"
-  cp drivers/media/dvb-frontends/*.h "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/dvb-frontends/"
-  mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/tuners"
-  cp drivers/media/tuners/*.h "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/media/tuners/"
+  install -Dt "${_builddir}/drivers/media/usb/dvb-usb" -m644 drivers/media/usb/dvb-usb/*.h
+  install -Dt "${_builddir}/drivers/media/dvb-frontends" -m644 drivers/media/dvb-frontends/*.h
+  install -Dt "${_builddir}/drivers/media/tuners" -m644 drivers/media/tuners/*.h
 
   # add xfs and shmem for aufs building
-  mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/fs/xfs"
-  mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/mm"
-  # removed in 3.17 series
-  # cp fs/xfs/xfs_sb.h "${pkgdir}/usr/lib/modules/${_kernver}/build/fs/xfs/xfs_sb.h"
+  mkdir -p "${_builddir}"/{fs/xfs,mm}
 
   # copy in Kconfig files
-  for i in $(find . -name "Kconfig*"); do
-    mkdir -p "${pkgdir}"/usr/lib/modules/${_kernver}/build/`echo ${i} | sed 's|/Kconfig.*||'`
-    cp ${i} "${pkgdir}/usr/lib/modules/${_kernver}/build/${i}"
-  done
+  find . -name Kconfig\* -exec install -Dm644 {} "${_builddir}/{}" \;
 
   # add objtool for external module building and enabled VALIDATION_STACK option
-  if [ -f tools/objtool/objtool ];  then
-      mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/tools/objtool"
-      cp -a tools/objtool/objtool ${pkgdir}/usr/lib/modules/${_kernver}/build/tools/objtool/
-  fi
-
-  chown -R root.root "${pkgdir}/usr/lib/modules/${_kernver}/build"
-  find "${pkgdir}/usr/lib/modules/${_kernver}/build" -type d -exec chmod 755 {} \;
-
-  # strip scripts directory
-  find "${pkgdir}/usr/lib/modules/${_kernver}/build/scripts" -type f -perm -u+w 2>/dev/null | while read binary ; do
-    case "$(file -bi "${binary}")" in
-      *application/x-sharedlib*) # Libraries (.so)
-        /usr/bin/strip ${STRIP_SHARED} "${binary}";;
-      *application/x-archive*) # Libraries (.a)
-        /usr/bin/strip ${STRIP_STATIC} "${binary}";;
-      *application/x-executable*) # Binaries
-        /usr/bin/strip ${STRIP_BINARIES} "${binary}";;
-    esac
-  done
+  install -Dt "${_builddir}/tools/objtool" tools/objtool/objtool
 
   # remove unneeded architectures
-  rm -rf "${pkgdir}"/usr/lib/modules/${_kernver}/build/arch/{alpha,arc,arm,arm26,arm64,avr32,blackfin,c6x,cris,frv,h8300,hexagon,ia64,m32r,m68k,m68knommu,metag,mips,microblaze,mn10300,openrisc,parisc,powerpc,ppc,s390,score,sh,sh64,sparc,sparc64,tile,unicore32,um,v850,xtensa}
+  local _arch
+  for _arch in "${_builddir}"/arch/*/; do
+    [[ ${_arch} == */x86/ ]] && continue
+    rm -r "${_arch}"
+  done
 
-  # remove a files already in linux-docs package
-  rm -f "${pkgdir}/usr/lib/modules/${_kernver}/build/Documentation/kbuild/Kconfig.recursion-issue-01"
-  rm -f "${pkgdir}/usr/lib/modules/${_kernver}/build/Documentation/kbuild/Kconfig.recursion-issue-02"
-  rm -f "${pkgdir}/usr/lib/modules/${_kernver}/build/Documentation/kbuild/Kconfig.select-break"
+  # remove files already in linux-docs package
+  rm -r "${_builddir}/Documentation"
+
+  # Fix permissions
+  chmod -R u=rwX,go=rX "${_builddir}"
+
+  # strip scripts directory
+  local _binary _strip
+  while read -rd '' _binary; do
+    case "$(file -bi "${_binary}")" in
+      *application/x-sharedlib*) _strip="${STRIP_SHARED}" ;; # Libraries (.so)
+      *application/x-archive*) _strip="${STRIP_STATIC}" ;; # Libraries (.a)
+      *application/x-executable*) _strip="${STRIP_BINARIES}" ;; # Binaries
+      *) continue ;;
+    esac
+    /usr/bin/strip ${_strip} "${_binary}"
+  done < <(find "${_builddir}/scripts" -type f -perm -u+w -print0 2>/dev/null)
 }
 
 pkgname=("${pkgbase}" "${pkgbase}-headers")
@@ -265,4 +206,3 @@ for _p in ${pkgname[@]}; do
     _package${_p#${pkgbase}}
   }"
 done
-
