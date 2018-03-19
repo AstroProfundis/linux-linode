@@ -6,7 +6,7 @@ pkgbase=linux-linode
 _basekernel=4.15
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.9
+pkgver=${_basekernel}.10
 pkgrel=1
 arch=('x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
@@ -16,7 +16,7 @@ options=('!strip')
 _ckpatchversion=1
 _ckpatchname="patch-${_basekernel}-ck${_ckpatchversion}"
 _gcc_more_v='20180310'
-_clearver=${_basekernel}.7-536
+_clearver=${_basekernel}.9-538
 source=("https://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar."{xz,sign}
         "https://www.kernel.org/pub/linux/kernel/v4.x/patch-${pkgver}."{xz,sign}
 	"http://ck.kolivas.org/patches/4.0/${_basekernel}/${_basekernel}-ck${_ckpatchversion}/${_ckpatchname}.xz"
@@ -34,7 +34,7 @@ source=("https://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar."{xz,sign}
 	)
 sha512sums=('c00d92659df815a53dcac7dde145b742b1f20867d380c07cb09ddb3295d6ff10f8931b21ef0b09d7156923a3957b39d74d87c883300173b2e20690d2b4ec35ea'
             'SKIP'
-            '60d24d79c19ab44520e4b583c74ca30045dc72bebd426a802c84d62c369fbda5bd7016aee1f5fa3931937cd31f17d6c0867080eb26949dedbd2d9522ee13143d'
+            '275abec91344e9409d27dc3ce801f104717730819a9d90786b0ef104525cf706291e0954a3e8d16618179a1e9603d6d12cd9cfdac3efac8783b83a0decdab94a'
             'SKIP'
             'ade9fb1e712acd6a0d0b993a22119707d95ac08a55ad9b7474c7d0ee4b8b2bcf07ad9dda92914abae5469e8c569f49a873eb3fffe7e821affb671e1a61d433fa'
             '079e34ec7bf3ef36438c648116e24c51e00ea8608a1d8b5776164478522d6a96dcab5fe0431e8e9a6282c11a1edd177e1b68fc971a81717b297e199efc101963'
@@ -46,8 +46,8 @@ sha512sums=('c00d92659df815a53dcac7dde145b742b1f20867d380c07cb09ddb3295d6ff10f89
             'db9080b2548e4dcd61eaaf20cd7d37cbbc8c204ce85a2e3408d0671f6b26010f77a61affd2c77e809768714eca29d3afb64765a3f2099317a2c928eff3feb4cf'
             '73cb4c064d8942fddaac48158b7e77d19afc1cb61f83936f21832ba7d7266ccfd3021114252edd5cec5542096204f48cf30544fd6bffff79bc94d96fabe74f52'
             '62870a08f000abfe8eb1f50271afdf04686af108554f7629dc5e1d7610ad14bdc9cd14d2609270b83f9edb745a520b81fa7bfb92ebcc28a146df040c895b549b'
-            '0b758342126881383ade60a01d05a880868cd58497f4e6dcf8c9ba58e3267c3827cdbe66eeab792621c34fc77c86286d1594e2d2e1dc4ac6aae0f4b4dd059bfe'
-            '39df5af1aad9891bf228582ca71a5038c134fd18ecb21d4cab1ba2cbe0eabb260712d449a57006ffe31fa65c939b92a50f1bb3c72cbbabd040571a2899cbee11')
+            '0f5531df585efa48e72b335ab88973bbce6c3807db55dcfac2fcda20f69618ee5bd5881ab278bd8cdde1f96bc34d5becca11469516c56a157248e0ae793d8679'
+            '04dfdfca8b59c2c3c18eb4b59f6466ef6d2fe6799a8b77f403fbce0554bfc739e43ff20897d9a6ed97ca101ab1bc1b067ff4a2491e3607b42de43f45005dc323')
 validpgpkeys=(
               'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linux Torvalds
               '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
@@ -77,7 +77,9 @@ prepare() {
   patch -Np1 -i ../0002-drm-i915-edp-Only-use-the-alternate-fixed-mode-if-it.patch
 
   # Apply clearlinux patches
-  for i in $(grep "^Patch" ${srcdir}/clearlinux/linux.spec | sed -n 's/.*: //p'); do
+  for i in $(grep "^Patch" ${srcdir}/clearlinux/linux.spec |\
+    grep -v '0001-drm-i915-Update-watermark-state-correctly-in-sanitiz.patch' |\
+    grep -v 'zero-regs.patch' | sed -n 's/.*: //p'); do
     msg "Applying ${i}"
     patch -p1 -i "$srcdir/clearlinux/${i}"
   done
