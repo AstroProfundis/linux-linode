@@ -1,5 +1,6 @@
 src/
 pkg/
+clearlinux/
 *~
 *.part
 *.xz

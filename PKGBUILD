@@ -3,64 +3,51 @@
 # tracks: https://projects.archlinux.org/svntogit/packages.git/log/trunk?h=packages/linux
 
 pkgbase=linux-linode
-_basekernel=4.14
+_basekernel=4.15
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.17
+pkgver=${_basekernel}.9
 pkgrel=1
 arch=('x86_64')
 url="https://github.com/AstroProfundis/linux-linode"
 license=(GPL2)
-makedepends=('xmlto' 'kmod' 'inetutils' 'bc' 'libelf')
+makedepends=('xmlto' 'kmod' 'inetutils' 'bc' 'libelf' 'git')
 options=('!strip')
 _ckpatchversion=1
 _ckpatchname="patch-${_basekernel}-ck${_ckpatchversion}"
-_gcc_patch="enable_additional_cpu_optimizations_for_gcc_v4.9+_kernel_v4.13+.patch"
-_preck2='https://github.com/ckolivas/linux/pull/7/commits'
+_gcc_more_v='20180310'
+_clearver=${_basekernel}.7-536
 source=("https://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar."{xz,sign}
         "https://www.kernel.org/pub/linux/kernel/v4.x/patch-${pkgver}."{xz,sign}
 	"http://ck.kolivas.org/patches/4.0/${_basekernel}/${_basekernel}-ck${_ckpatchversion}/${_ckpatchname}.xz"
-	"https://raw.githubusercontent.com/graysky2/kernel_gcc_patch/master/${_gcc_patch}"
+	"enable_additional_cpu_optimizations-$_gcc_more_v.tar.gz::https://github.com/graysky2/kernel_gcc_patch/archive/$_gcc_more_v.tar.gz" # enable_additional_cpu_optimizations_for_gcc
 	"https://raw.githubusercontent.com/dolohow/uksm/master/uksm-${_basekernel}.patch"
+	"clearlinux::git+https://github.com/clearlinux-pkgs/linux.git#tag=${_clearver}"
         'config'
         '08_linux_linode'
         '98-linux-linode.hook'
         '99-grub-ll.hook'
         'menu.lst'
         'preset'
-	# pre ck2 patches
-	"$_preck2/811cb391e71c1d60387dbbd6ae0bbc4e61f06acb.patch"
-	"$_preck2/6bfb805cbac27b18fb4ad7537fe90dfc39e17f35.patch"
-	"$_preck2/1588e6bf316231685204e358dfe172851b39fd1e.patch"
-	"$_preck2/df2a75f4864b30011ab6a6f365d9378d8eafa53b.patch"
-	"$_preck2/a79d648fcde72fc98048d4435bc86864a59fd01b.patch"
-	"unfuck_MuQSS_for_4.14.15+.patch::https://github.com/ckolivas/linux/commit/25849740d77dfc089fdbfb53623e50d38a972aff.patch"
 	"0001-add-sysctl-to-disallow-unprivileged-CLONE_NEWUSER-by.patch"
-	"0002-dccp-CVE-2017-8824-use-after-free-in-DCCP-code.patch"
-	"0003-xfrm-Fix-stack-out-of-bounds-read-on-socket-policy-l.patch"
+	"0002-drm-i915-edp-Only-use-the-alternate-fixed-mode-if-it.patch"
 	)
-sha512sums=('77e43a02d766c3d73b7e25c4aafb2e931d6b16e870510c22cef0cdb05c3acb7952b8908ebad12b10ef982c6efbe286364b1544586e715cf38390e483927904d8'
+sha512sums=('c00d92659df815a53dcac7dde145b742b1f20867d380c07cb09ddb3295d6ff10f8931b21ef0b09d7156923a3957b39d74d87c883300173b2e20690d2b4ec35ea'
             'SKIP'
-            'fd785f0ab864ef4d2b18041183d867fb3a00e6d8718cb016d61a5c6de9f29f6653678ae6cc72593224da3e1bc44cc061d285a2f426ca1d62b4eb571549c440e3'
+            '60d24d79c19ab44520e4b583c74ca30045dc72bebd426a802c84d62c369fbda5bd7016aee1f5fa3931937cd31f17d6c0867080eb26949dedbd2d9522ee13143d'
             'SKIP'
-            '5e81d6a8319d030572ad5b6379bc43f2f5f98b6e4f050b1285bd6004516d1bf2e8eee8d3425a09317e15309cf030da2534417265b474aaab80e72e22c04741a2'
-            '5ca7ae20245a54caa71fb570d971d6872d4e888f35c6123b93fbca16baf9a0e2500d6ec931f3906e4faecaaca9cad0d593694d9cab617efd0cb7b5fc09c0fa48'
-            '44b31276d4d712e4e1e1455e128daa079ddd9d72a4620289607faf6134a225737004e8742de79e0283e98ef2d4f746f075e041870d37eab191c93c566f945c7f'
-            '190308495bf2cc0bc9834d445611f7a3e116e4ce60333fcab7b16fc6d49cbb90651d7a728be3bd022ef5d6065217cf46c576730a547e527d477896fe1c799987'
+            'ade9fb1e712acd6a0d0b993a22119707d95ac08a55ad9b7474c7d0ee4b8b2bcf07ad9dda92914abae5469e8c569f49a873eb3fffe7e821affb671e1a61d433fa'
+            '079e34ec7bf3ef36438c648116e24c51e00ea8608a1d8b5776164478522d6a96dcab5fe0431e8e9a6282c11a1edd177e1b68fc971a81717b297e199efc101963'
+            '337b220e5c5f240bf195fcf174974c03b127598723fc4ea5813e5c32154048ac4193737418b21e720e9034ad53589b59b898d0e648925db7e2db2ad57acd7fe7'
+            'SKIP'
+            '00db9715b6a3a2813c7d2e3f9c18507515d2c97d40a80d7fd3d15c5e9c5c829bf658ddcf26b4ca82aef164a46bbb2ea1148d959aa1d768f226b93eb80e9e0e89'
             '7a80f858c32a9dd62f43aba0b7119a1196869216117164bcde24ab46022e8a1bbe27821faa26ca690a1633a5a9fe324e98e5cdf14f37591d569cbc71f542482d'
             'c57a6c8d9978cb6a1034bed33ba5e06bef9b134f22113761798d4fa46e8091e7b0bd26f3a14d79122ba780b2f7a93ca26850f4da6a654f81b34cc79c242f683f'
             'db9080b2548e4dcd61eaaf20cd7d37cbbc8c204ce85a2e3408d0671f6b26010f77a61affd2c77e809768714eca29d3afb64765a3f2099317a2c928eff3feb4cf'
             '73cb4c064d8942fddaac48158b7e77d19afc1cb61f83936f21832ba7d7266ccfd3021114252edd5cec5542096204f48cf30544fd6bffff79bc94d96fabe74f52'
             '62870a08f000abfe8eb1f50271afdf04686af108554f7629dc5e1d7610ad14bdc9cd14d2609270b83f9edb745a520b81fa7bfb92ebcc28a146df040c895b549b'
-            '16439b1fb759ba7c4a89a3a7d69b89d5cfc594b1b47c30cfaae4942d806f47373c1c8d93a2fe9afd151bd8a2062806572fd16aa975f6a8876439c760c21b8acb'
-            '12a871b010ea01d2462337701aac8e6ecdc10a7130f6b69feb394825ac71633fecf0a0917d499011ed34baae733e9d0957b0d99f33f06988306daa88383dc788'
-            '63e92a677e5a093af6f414a730c38fdd3f388e00e608fe2f1466e433793963c36192bf8eeae07e7d49cdf4a7f28540e2348285126d1203ecf2db8f0e7d875bfd'
-            '92c997ee4d317602dafcfb2a916d45f7f1c5039cc2dbf09d948d945c4a561b8552e0c4efd590ea7d97ff7d9539f7b14472fa63b5b47ef1a694157b46385a70c6'
-            '43278da2ec74abee03d41f453f894c0a7bc1dfcd8c0382087d52e36f9dcf83f78a9067339d74b2a028cc0b09d5e0865ec291e159a5d7d2b1909d1e43f574981f'
-            'aa1f65b505d32af70e0e3c921e477f7e0adea76204ede19ced32514598a1f369bf0897487273b2acb99290ddcd2788707f0711290b767183cecb689f6df5cfa1'
-            '2860bff9507fd8d13ee556c3e606c26104d462c96f57ce5ba7954242ce23b2584d8556a7f24a6a3c998a9a04d61555ce5f003c6a3c6933b7cce753c730d2d9dc'
-            '6301e90f0977c339035caf3e19e9b7288c217d20434f13c111487f14de2bdfa9250c57a0d3a80468c24f99acce0511be68abebfa44c9fca72a0eccedc0930df4'
-            'c11a4fa93487e74b6e9fc9a6ebff61d00404635583a4ac17a9d33819184343fbe0d3b3db5e7925b84865d56ceeaa9bc25f36c5bd3cde04c14d23fa2f2908d813')
+            '0b758342126881383ade60a01d05a880868cd58497f4e6dcf8c9ba58e3267c3827cdbe66eeab792621c34fc77c86286d1594e2d2e1dc4ac6aae0f4b4dd059bfe'
+            '39df5af1aad9891bf228582ca71a5038c134fd18ecb21d4cab1ba2cbe0eabb260712d449a57006ffe31fa65c939b92a50f1bb3c72cbbabd040571a2899cbee11')
 validpgpkeys=(
               'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linux Torvalds
               '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
@@ -74,16 +61,26 @@ install=install
 
 prepare() {
   cd "${srcdir}/${_srcname}"
+
+  # add upstream patch
+  msg "Applying Linux patches..."
   patch -p1 -i "${srcdir}/patch-${pkgver}"
 
+  # add latest fixes from stable queue, if needed
+  # http://git.kernel.org/?p=linux/kernel/git/stable/stable-queue.git
+
+  msg "Applying Custom patches..."
   # disable USER_NS for non-root users by default
   patch -Np1 -i ../0001-add-sysctl-to-disallow-unprivileged-CLONE_NEWUSER-by.patch
 
-  # https://nvd.nist.gov/vuln/detail/CVE-2017-8824
-  patch -Np1 -i ../0002-dccp-CVE-2017-8824-use-after-free-in-DCCP-code.patch
+  # https://bugs.archlinux.org/task/56711
+  patch -Np1 -i ../0002-drm-i915-edp-Only-use-the-alternate-fixed-mode-if-it.patch
 
-  # https://bugs.archlinux.org/task/56605
-  patch -Np1 -i ../0003-xfrm-Fix-stack-out-of-bounds-read-on-socket-policy-l.patch
+  # Apply clearlinux patches
+  for i in $(grep "^Patch" ${srcdir}/clearlinux/linux.spec | sed -n 's/.*: //p'); do
+    msg "Applying ${i}"
+    patch -p1 -i "$srcdir/clearlinux/${i}"
+  done
 
   # fix naming schema in EXTRAVERSION of ck patch set
   sed -i -re "s/^(.EXTRAVERSION).*$/\1 = /" ../${_ckpatchname}
@@ -91,12 +88,6 @@ prepare() {
   # Patch source with ck patchset
   msg "Applying ck patchset..."
   patch -Np1 -i ../${_ckpatchname}
-  patch -Np1 -i ../811cb391e71c1d60387dbbd6ae0bbc4e61f06acb.patch
-  patch -Np1 -i ../6bfb805cbac27b18fb4ad7537fe90dfc39e17f35.patch
-  patch -Np1 -i ../1588e6bf316231685204e358dfe172851b39fd1e.patch
-  patch -Np1 -i ../df2a75f4864b30011ab6a6f365d9378d8eafa53b.patch
-  patch -Np1 -i ../a79d648fcde72fc98048d4435bc86864a59fd01b.patch
-  patch -Np1 -i ../unfuck_MuQSS_for_4.14.15+.patch
 
   # Patch source with UKSM patchset
   msg "Applying UKSM patchset..."
@@ -105,7 +96,7 @@ prepare() {
   # Patch source to unlock additional gcc CPU optimizatons
   # https://github.com/graysky2/kernel_gcc_patch
   msg "Enabling additional CPU optimizations..."
-  patch -Np1 -i ../${_gcc_patch}
+  patch -Np1 -i "../kernel_gcc_patch-$_gcc_more_v/enable_additional_cpu_optimizations_for_gcc_v4.9+_kernel_v4.13+.patch"
 
   make mrproper
   cat "${srcdir}/config" > ./.config
@@ -136,10 +127,10 @@ build() {
 
 _package() {
   cd "${srcdir}/${_srcname}"
-  _kernver="$(make LOCALVERSION= kernelrelease)"
-  emdir="extramodules-${_basekernel}${_kernelname:--ARCH}"
+  _kernver="$(make kernelrelease)"
+  emdir="extramodules-${_basekernel}${_kernelname}"
   mkdir -p "${pkgdir}"/{usr/lib/modules/"$emdir",boot/grub}
-  make LOCALVERSION= INSTALL_MOD_PATH="${pkgdir}/usr" modules_install
+  make INSTALL_MOD_PATH="${pkgdir}/usr" modules_install
   rm -rf "${pkgdir}"/usr/lib/modules/${_kernver}/{source,build}
   cp arch/x86/boot/bzImage "${pkgdir}/boot/vmlinuzll-${pkgname}"
   install -D -m644 vmlinux "${pkgdir}/usr/lib/modules/${_kernver}/build/vmlinux"
