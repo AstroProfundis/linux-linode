@@ -4,7 +4,7 @@
 
 pkgbase=linux-linode
 _basekernel=5.4
-pkgrel=1
+pkgrel=2
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
 pkgver=${_basekernel}.20
@@ -27,7 +27,7 @@ md5sums=('ce9b2d974d27408a61c53a30d3f98fb9'
          'SKIP'
          '88eca878de0ab59665075f0df200467e'
          'f3bed981743d51302e0dc235dde7ad50'
-         '172b4f5d01ec8303875dac042b4c2fbe'
+         'fcba7b20550d0f2a3560938ddb361f1a'
          'b24775bcf1d7a04c1d489af73c6e74b0'
          '625481f015365febcd65aa136ee555f9'
          '901c03c685c65119b50666cb31a080be'
@@ -36,7 +36,7 @@ sha256sums=('bf338980b1670bca287f9994b7441c2361907635879169c64ae78364efc5f491'
             'SKIP'
             'a3fa58e27a36b8e363f95207206cf8cb162ec348cf8ccb8c6c4f9c478f2ca1b6'
             '81d34bf02e771a126af5cb382d44a86dcc759c88b7c89fc7e5b7737731b9130e'
-            'f56a8f78d9881191d2da4c22768f9e08bb9777e123d10bd016546e42ee8b350f'
+            '616103b983536bbaf401c1daa1fbd4ec7aadb42719e2a0b1a8b99c3312a44a7b'
             'a2295cee5ae8c8d9c3efb0483e5e842f6bd9753f851c7433465b242264738546'
             '368fb58e7aa465f597e9a72da4b6eea4183c1a85242173412d54ad18d10d8fb3'
             'df9f20f818bf6c11296e5ac58c5fdd664ba17f3d80cf301eef9309ddb528741d'
@@ -45,7 +45,7 @@ sha512sums=('9f60f77e8ab972b9438ac648bed17551c8491d6585a5e85f694b2eaa4c623fbc61e
             'SKIP'
             '65fbcdbd41e35c17601ff15bbe33933be2ab7a694aa181a0b802cc11c1c653c9b688dbb382076cbad05983a0c07467955c035ae25f5175f7ce5bc24339303d77'
             'c9aa593db5c142cbc60c60fb15dc780c11af03a6607301250c27d5042b14481f1ea7edfc87bde70019d2bcd1f1d53c05c3291f94b9e66795c81fade740419818'
-            'c0a35e7dd57f6580e96c34f86b699b4f476ceac51db052d529680756e4878ab1f0e62cefd05001dd3a672c21c60d45e5f06cb18fb1f2ea10fae26e34295d5dfc'
+            '178410f4fd158b0cccc622efb325f2df2643f9bb1febcb92cc19a819f10fa3b388db4b840a209b8a82973de5eb4cac8f09e832ab609ba56a4a65d08c6885dc55'
             '1e901b8894743e9dcb04046a5fa58e14b19095b3295abae679dcbbf309bd79ddf1716dcd07ae8a71e7cdc9361216c0c9da12a76edb45e9388c512b07df7759e7'
             'db9080b2548e4dcd61eaaf20cd7d37cbbc8c204ce85a2e3408d0671f6b26010f77a61affd2c77e809768714eca29d3afb64765a3f2099317a2c928eff3feb4cf'
             '1a17f83747ebd2dbe8d57996a1234f9e72de0754f8907c984477d761c2d99753490b72d80e2c801b85ded705818d530401f6377e3312937d72d1e4052007ce30'
@@ -92,16 +92,30 @@ _package() {
 
   cd "${srcdir}/${_srcname}"
   local kernver="$(<version)"
-  local modulesdir="$pkgdir"/usr/lib/modules/$_kernver
+  local modulesdir="$pkgdir/usr/lib/modules/$kernver"
+
   mkdir -p "$modulesdir" "${pkgdir}"/boot/grub
-  make INSTALL_MOD_PATH="${pkgdir}/usr" modules_install
-  rm -rf "$modulesdir"/{source,build}
-  echo "$pkgname" | install -Dm644 /dev/stdin  "$modulesdir/pkgbase"
-  install -D -m644 "$(make -s image_name)"     "$modulesdir/vmlinuz"
+
+  echo "Installing boot image..."
+  # systemd expects to find the kernel here to allow hibernation
+  # https://github.com/systemd/systemd/commit/edda44605f06a41fb86b7ab8128dcf99161d2344
+  install -Dm644 "$(make -s image_name)" "$modulesdir/vmlinuz"
+
+  # Used by mkinitcpio to name the kernel
+  echo "$pkgbase" | install -Dm644 /dev/stdin "$modulesdir/pkgbase"
+
+  echo "Installing modules..."
+  make INSTALL_MOD_PATH="$pkgdir/usr" modules_install
+
+  # remove build and source links
+  rm "$modulesdir"/{source,build}
+
   install -D -m644 "${srcdir}/preset"          "${pkgdir}/etc/mkinitcpio.d/${pkgname}.preset"
   install -D -m755 "${srcdir}/08_linux_linode" "${pkgdir}/etc/grub.d/08_linux_linode"
   install -D -m644 "${srcdir}/99-grub-ll.hook" "${pkgdir}/usr/share/libalpm/hooks/99-grub-ll.hook"
   sed "s/%VER%/${pkgver}-${pkgrel}/ig" "${srcdir}/menu.lst" > "${pkgdir}/boot/grub/menu.lst"
+
+  echo "Fixing permissions..."
   chmod -Rc u=rwX,go=rX "$pkgdir"
 }
 
