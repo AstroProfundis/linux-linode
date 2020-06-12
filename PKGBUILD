@@ -4,10 +4,10 @@
 
 pkgbase=linux-linode
 _basekernel=5.4
-pkgrel=2
+pkgrel=1
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.20
+pkgver=${_basekernel}.46
 arch=('x86_64')
 url="https://github.com/yardenac/linux-linode"
 license=(GPL2)
@@ -25,8 +25,8 @@ source=("https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/${_srcname}.tar."{xz,s
         'preset')
 md5sums=('ce9b2d974d27408a61c53a30d3f98fb9'
          'SKIP'
-         '88eca878de0ab59665075f0df200467e'
-         'f3bed981743d51302e0dc235dde7ad50'
+         'b36e63e054dbc1b1c61a41be4ad773d7'
+         '150751b7db9f7bd579841a7f0dfc291f'
          'fcba7b20550d0f2a3560938ddb361f1a'
          'b24775bcf1d7a04c1d489af73c6e74b0'
          '625481f015365febcd65aa136ee555f9'
@@ -34,8 +34,8 @@ md5sums=('ce9b2d974d27408a61c53a30d3f98fb9'
          '3d6427cc412dbc226b5d058c82ba7c66')
 sha256sums=('bf338980b1670bca287f9994b7441c2361907635879169c64ae78364efc5f491'
             'SKIP'
-            'a3fa58e27a36b8e363f95207206cf8cb162ec348cf8ccb8c6c4f9c478f2ca1b6'
-            '81d34bf02e771a126af5cb382d44a86dcc759c88b7c89fc7e5b7737731b9130e'
+            '4f85e3d59aadf31bea6170439b16153fd499f86718d214c1c66065c64f762336'
+            '422a7a32f45dc01bcf90707bbdf870a5a8428eeae5b98453cae42138f0d7bbdf'
             '616103b983536bbaf401c1daa1fbd4ec7aadb42719e2a0b1a8b99c3312a44a7b'
             'a2295cee5ae8c8d9c3efb0483e5e842f6bd9753f851c7433465b242264738546'
             '368fb58e7aa465f597e9a72da4b6eea4183c1a85242173412d54ad18d10d8fb3'
@@ -43,8 +43,8 @@ sha256sums=('bf338980b1670bca287f9994b7441c2361907635879169c64ae78364efc5f491'
             '33d9f913e4aed9f41bf263ff784921ab7d69597732079cbd06ff05b9adb32f44')
 sha512sums=('9f60f77e8ab972b9438ac648bed17551c8491d6585a5e85f694b2eaa4c623fbc61eb18419b2656b6795eac5deec0edaa04547fc6723fbda52256bd7f3486898f'
             'SKIP'
-            '65fbcdbd41e35c17601ff15bbe33933be2ab7a694aa181a0b802cc11c1c653c9b688dbb382076cbad05983a0c07467955c035ae25f5175f7ce5bc24339303d77'
-            'c9aa593db5c142cbc60c60fb15dc780c11af03a6607301250c27d5042b14481f1ea7edfc87bde70019d2bcd1f1d53c05c3291f94b9e66795c81fade740419818'
+            '98d81824e36551c74c4411372476be374c52f13bf7b8e733bcc7dbc3a08c467f2bd26a337c0edb0f1366c93df6d1e412b02c1b519cccd0379d32de6184c6a957'
+            'bacc2a6aba0316ea5cbe121850d57ab15a914d8fd4e9087390a26accc4916255b2b77ae14339e94029910538d7095a8567a2929aad7d4e5db54adc62b1758462'
             '178410f4fd158b0cccc622efb325f2df2643f9bb1febcb92cc19a819f10fa3b388db4b840a209b8a82973de5eb4cac8f09e832ab609ba56a4a65d08c6885dc55'
             '1e901b8894743e9dcb04046a5fa58e14b19095b3295abae679dcbbf309bd79ddf1716dcd07ae8a71e7cdc9361216c0c9da12a76edb45e9388c512b07df7759e7'
             'db9080b2548e4dcd61eaaf20cd7d37cbbc8c204ce85a2e3408d0671f6b26010f77a61affd2c77e809768714eca29d3afb64765a3f2099317a2c928eff3feb4cf'
