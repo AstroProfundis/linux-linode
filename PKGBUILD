@@ -7,7 +7,7 @@ _basekernel=5.4
 pkgrel=1
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.68
+pkgver=${_basekernel}.72
 arch=('x86_64')
 url="https://github.com/yardenac/linux-linode"
 license=(GPL2)
@@ -17,7 +17,7 @@ _uksm_path="https://raw.githubusercontent.com/dolohow/uksm/master/v5.x"
 _uksm_patch="uksm-${_basekernel}.patch"
 source=("https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/${_srcname}.tar."{xz,sign}
         "https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/patch-${pkgver}.xz"
-        "${_uksm_path}/${_uksm_patch}"
+        #"${_uksm_path}/${_uksm_patch}"
         'config'
         '08_linux_linode'
         '99-grub-ll.hook'
@@ -25,8 +25,7 @@ source=("https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/${_srcname}.tar."{xz,s
         'preset')
 md5sums=('ce9b2d974d27408a61c53a30d3f98fb9'
          'SKIP'
-         'ae1cceaa700442630aebbb60def5a82f'
-         '150751b7db9f7bd579841a7f0dfc291f'
+         '5e5091e38139e2cd03716aabc206a6ab'
          'fcba7b20550d0f2a3560938ddb361f1a'
          'b24775bcf1d7a04c1d489af73c6e74b0'
          '625481f015365febcd65aa136ee555f9'
@@ -34,8 +33,7 @@ md5sums=('ce9b2d974d27408a61c53a30d3f98fb9'
          '3d6427cc412dbc226b5d058c82ba7c66')
 sha256sums=('bf338980b1670bca287f9994b7441c2361907635879169c64ae78364efc5f491'
             'SKIP'
-            '5a66d484d5da7c790d48330e09657d5e70749ce5f5392272f46cdfef0ada7462'
-            '422a7a32f45dc01bcf90707bbdf870a5a8428eeae5b98453cae42138f0d7bbdf'
+            'bce941bcb6c8148ac19cd2fa4f1e19c6c75f699a3bcdfd452df7484cff2a2353'
             '616103b983536bbaf401c1daa1fbd4ec7aadb42719e2a0b1a8b99c3312a44a7b'
             'a2295cee5ae8c8d9c3efb0483e5e842f6bd9753f851c7433465b242264738546'
             '368fb58e7aa465f597e9a72da4b6eea4183c1a85242173412d54ad18d10d8fb3'
@@ -43,8 +41,7 @@ sha256sums=('bf338980b1670bca287f9994b7441c2361907635879169c64ae78364efc5f491'
             '33d9f913e4aed9f41bf263ff784921ab7d69597732079cbd06ff05b9adb32f44')
 sha512sums=('9f60f77e8ab972b9438ac648bed17551c8491d6585a5e85f694b2eaa4c623fbc61eb18419b2656b6795eac5deec0edaa04547fc6723fbda52256bd7f3486898f'
             'SKIP'
-            '4db326bc299245e32ccd7e0d988a823fa3d115265d6f7a16ece056f1f6317193405de43b9dbd020ec992822442aa5c0311d9b56ed7408b5bc8587ca49612f962'
-            'bacc2a6aba0316ea5cbe121850d57ab15a914d8fd4e9087390a26accc4916255b2b77ae14339e94029910538d7095a8567a2929aad7d4e5db54adc62b1758462'
+            'c553c2fcee0601f90b143e8669abc153173ec4fa8f44aee59ea8da95b03e707f0ca542f9a1574f789dfe61a9fc42e211394d41ad990fc338d686d73c49230708'
             '178410f4fd158b0cccc622efb325f2df2643f9bb1febcb92cc19a819f10fa3b388db4b840a209b8a82973de5eb4cac8f09e832ab609ba56a4a65d08c6885dc55'
             '1e901b8894743e9dcb04046a5fa58e14b19095b3295abae679dcbbf309bd79ddf1716dcd07ae8a71e7cdc9361216c0c9da12a76edb45e9388c512b07df7759e7'
             'db9080b2548e4dcd61eaaf20cd7d37cbbc8c204ce85a2e3408d0671f6b26010f77a61affd2c77e809768714eca29d3afb64765a3f2099317a2c928eff3feb4cf'
