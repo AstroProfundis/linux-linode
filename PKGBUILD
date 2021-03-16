@@ -3,46 +3,31 @@
 # tracks: https://projects.archlinux.org/svntogit/packages.git/log/trunk?h=packages/linux
 
 pkgbase=linux-linode
-_basekernel=5.4
+_basekernel=5.10
 pkgrel=1
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.72
+pkgver=${_basekernel}.22
 arch=('x86_64')
 url="https://github.com/yardenac/linux-linode"
 license=(GPL2)
 makedepends=(xmlto docbook-xsl kmod inetutils bc libelf)
 options=('!strip')
-_uksm_path="https://raw.githubusercontent.com/dolohow/uksm/master/v5.x"
-_uksm_patch="uksm-${_basekernel}.patch"
+_uksm_path="https://gitlab.com/sirlucjan/kernel-patches/-/raw/master/${_basekernel}/uksm-patches"
+_uksm_patch="0001-UKSM-for-${_basekernel}.patch"
 source=("https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/${_srcname}.tar."{xz,sign}
         "https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/patch-${pkgver}.xz"
-        #"${_uksm_path}/${_uksm_patch}"
+        "${_uksm_path}/${_uksm_patch}"
         'config'
         '08_linux_linode'
         '99-grub-ll.hook'
         'menu.lst'
         'preset')
-md5sums=('ce9b2d974d27408a61c53a30d3f98fb9'
-         'SKIP'
-         '5e5091e38139e2cd03716aabc206a6ab'
-         'fcba7b20550d0f2a3560938ddb361f1a'
-         'b24775bcf1d7a04c1d489af73c6e74b0'
-         '625481f015365febcd65aa136ee555f9'
-         '901c03c685c65119b50666cb31a080be'
-         '3d6427cc412dbc226b5d058c82ba7c66')
-sha256sums=('bf338980b1670bca287f9994b7441c2361907635879169c64ae78364efc5f491'
+sha512sums=('95bc137d0cf9148da6a9d1f1a878698dc27b40f68e22c597544010a6c591ce1b256f083489d3ff45ff77753289b535135590194d88ef9f007d0ddab3d74de70e'
             'SKIP'
-            'bce941bcb6c8148ac19cd2fa4f1e19c6c75f699a3bcdfd452df7484cff2a2353'
-            '616103b983536bbaf401c1daa1fbd4ec7aadb42719e2a0b1a8b99c3312a44a7b'
-            'a2295cee5ae8c8d9c3efb0483e5e842f6bd9753f851c7433465b242264738546'
-            '368fb58e7aa465f597e9a72da4b6eea4183c1a85242173412d54ad18d10d8fb3'
-            'df9f20f818bf6c11296e5ac58c5fdd664ba17f3d80cf301eef9309ddb528741d'
-            '33d9f913e4aed9f41bf263ff784921ab7d69597732079cbd06ff05b9adb32f44')
-sha512sums=('9f60f77e8ab972b9438ac648bed17551c8491d6585a5e85f694b2eaa4c623fbc61eb18419b2656b6795eac5deec0edaa04547fc6723fbda52256bd7f3486898f'
-            'SKIP'
-            'c553c2fcee0601f90b143e8669abc153173ec4fa8f44aee59ea8da95b03e707f0ca542f9a1574f789dfe61a9fc42e211394d41ad990fc338d686d73c49230708'
-            '178410f4fd158b0cccc622efb325f2df2643f9bb1febcb92cc19a819f10fa3b388db4b840a209b8a82973de5eb4cac8f09e832ab609ba56a4a65d08c6885dc55'
+            '7cce9a43615aa810864876364aa2833d4a5b9c8d4f9f995f80ba86fe2ebe9ab0cb51002958d2fad026b4c0213230e979591dc34234a75afa9bf7f1a401f19e4e'
+            '003e33e214065a57df00458d4a88db5cc33eb00030a516264fc4b2e4de9b6649466451260a30cf86667f8981fc493103dea509217b3850773a65d3beb95e6441'
+            '5782b88e85004364bab1fee8a762f086b1f878318b42121c1f3ece832bb98a831a57653332f00070c1da535ee39b0cfec5041c971ab4200a7c291b01133767fc'
             '1e901b8894743e9dcb04046a5fa58e14b19095b3295abae679dcbbf309bd79ddf1716dcd07ae8a71e7cdc9361216c0c9da12a76edb45e9388c512b07df7759e7'
             'db9080b2548e4dcd61eaaf20cd7d37cbbc8c204ce85a2e3408d0671f6b26010f77a61affd2c77e809768714eca29d3afb64765a3f2099317a2c928eff3feb4cf'
             '1a17f83747ebd2dbe8d57996a1234f9e72de0754f8907c984477d761c2d99753490b72d80e2c801b85ded705818d530401f6377e3312937d72d1e4052007ce30'
@@ -52,6 +37,10 @@ validpgpkeys=(
               '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
               'E240B57E2C4630BA768E2F26FC1B547C8D8172C8' # Levente Polyak
 )
+pkgdesc="Kernel for Linode servers"
+depends=(coreutils linux-firmware kmod mkinitcpio grub)
+conflicts=(grub-legacy)
+backup=(etc/mkinitcpio.d/${pkgname}.preset boot/grub/menu.lst)
 
 prepare() {
   cd "${srcdir}/${_srcname}"
