@@ -7,16 +7,18 @@ _basekernel=5.10
 pkgrel=1
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.22
+pkgver=${_basekernel}.24
 arch=('x86_64')
 url="https://github.com/yardenac/linux-linode"
 license=(GPL2)
 makedepends=(xmlto docbook-xsl kmod inetutils bc libelf)
 options=('!strip')
+_gcc_more_v=20210309
 _uksm_path="https://gitlab.com/sirlucjan/kernel-patches/-/raw/master/${_basekernel}/uksm-patches"
 _uksm_patch="0001-UKSM-for-${_basekernel}.patch"
 source=("https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/${_srcname}.tar."{xz,sign}
         "https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/patch-${pkgver}.xz"
+        "more-uarches-$_gcc_more_v.tar.gz::https://github.com/graysky2/kernel_gcc_patch/archive/$_gcc_more_v.tar.gz"
         "${_uksm_path}/${_uksm_patch}"
         'config'
         '08_linux_linode'
@@ -25,9 +27,10 @@ source=("https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/${_srcname}.tar."{xz,s
         'preset')
 sha512sums=('95bc137d0cf9148da6a9d1f1a878698dc27b40f68e22c597544010a6c591ce1b256f083489d3ff45ff77753289b535135590194d88ef9f007d0ddab3d74de70e'
             'SKIP'
-            '7cce9a43615aa810864876364aa2833d4a5b9c8d4f9f995f80ba86fe2ebe9ab0cb51002958d2fad026b4c0213230e979591dc34234a75afa9bf7f1a401f19e4e'
+            '4cda1cd90e2f663f0c0f043228249100dc79c3e6409f1402ef4ad989cbdc1155726e35c2aae571c2ea17a7f0e83fa1ce9074f02511cbd0c93115a1eb9cd6e5db'
+            '53cf1f6f17840224fe7406d529968148f09b7f6c1a92bcb677816f19176cfc52eec194e9f8a02666815c1489abd03bdea36a1fb7233bf828dea618318fc76050'
             '003e33e214065a57df00458d4a88db5cc33eb00030a516264fc4b2e4de9b6649466451260a30cf86667f8981fc493103dea509217b3850773a65d3beb95e6441'
-            '5782b88e85004364bab1fee8a762f086b1f878318b42121c1f3ece832bb98a831a57653332f00070c1da535ee39b0cfec5041c971ab4200a7c291b01133767fc'
+            '6cce3c0271be53b7f3535ba4da3042ad131d3b0255f95a21ad02749dc9899ebffd765605d533600dd8c34988f584d36a231bf43daee640c761df80c8a98b0839'
             '1e901b8894743e9dcb04046a5fa58e14b19095b3295abae679dcbbf309bd79ddf1716dcd07ae8a71e7cdc9361216c0c9da12a76edb45e9388c512b07df7759e7'
             'db9080b2548e4dcd61eaaf20cd7d37cbbc8c204ce85a2e3408d0671f6b26010f77a61affd2c77e809768714eca29d3afb64765a3f2099317a2c928eff3feb4cf'
             '1a17f83747ebd2dbe8d57996a1234f9e72de0754f8907c984477d761c2d99753490b72d80e2c801b85ded705818d530401f6377e3312937d72d1e4052007ce30'
@@ -57,6 +60,11 @@ prepare() {
     echo "Applying patch $src..."
     patch -Np1 < "../$src"
   done
+
+  # https://github.com/graysky2/kernel_gcc_patch
+  # make sure to apply after olddefconfig to allow the next section
+  echo "Patching to enable GCC optimization for other uarchs..."
+  patch -Np1 -i "$srcdir/kernel_gcc_patch-$_gcc_more_v/more-uarches-for-gcc-v10-and-kernel-5.8+.patch"
 
   cp "${srcdir}/config" .config
   make oldconfig
