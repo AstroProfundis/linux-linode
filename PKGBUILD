@@ -7,18 +7,21 @@ _basekernel=5.10
 pkgrel=1
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
-pkgver=${_basekernel}.24
+pkgver=${_basekernel}.26
 arch=('x86_64')
 url="https://github.com/yardenac/linux-linode"
 license=(GPL2)
-makedepends=(xmlto docbook-xsl kmod inetutils bc libelf)
+makedepends=(xmlto docbook-xsl kmod inetutils bc libelf git)
 options=('!strip')
 _gcc_more_v=20210309
+# Clear Linux patches
+_clr=${_basekernel}.19-1032
 _uksm_path="https://gitlab.com/sirlucjan/kernel-patches/-/raw/master/${_basekernel}/uksm-patches"
 _uksm_patch="0001-UKSM-for-${_basekernel}.patch"
 source=("https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/${_srcname}.tar."{xz,sign}
         "https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/patch-${pkgver}.xz"
         "more-uarches-$_gcc_more_v.tar.gz::https://github.com/graysky2/kernel_gcc_patch/archive/$_gcc_more_v.tar.gz"
+        "clearlinux::git+https://github.com/clearlinux-pkgs/linux.git#tag=${_clr}"
         "${_uksm_path}/${_uksm_patch}"
         'config'
         '08_linux_linode'
@@ -27,10 +30,11 @@ source=("https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/${_srcname}.tar."{xz,s
         'preset')
 sha512sums=('95bc137d0cf9148da6a9d1f1a878698dc27b40f68e22c597544010a6c591ce1b256f083489d3ff45ff77753289b535135590194d88ef9f007d0ddab3d74de70e'
             'SKIP'
-            '4cda1cd90e2f663f0c0f043228249100dc79c3e6409f1402ef4ad989cbdc1155726e35c2aae571c2ea17a7f0e83fa1ce9074f02511cbd0c93115a1eb9cd6e5db'
+            '0938834855a70ee5a77d7fc45f3f005983d0ad726f9d6367297970d885f19c433cf09c8592f74ba5c2861bf7eeb303455dd7ecebf4ff4c31baeff7c96357b9be'
             '53cf1f6f17840224fe7406d529968148f09b7f6c1a92bcb677816f19176cfc52eec194e9f8a02666815c1489abd03bdea36a1fb7233bf828dea618318fc76050'
+            'SKIP'
             '003e33e214065a57df00458d4a88db5cc33eb00030a516264fc4b2e4de9b6649466451260a30cf86667f8981fc493103dea509217b3850773a65d3beb95e6441'
-            '6cce3c0271be53b7f3535ba4da3042ad131d3b0255f95a21ad02749dc9899ebffd765605d533600dd8c34988f584d36a231bf43daee640c761df80c8a98b0839'
+            '55f40f473c9d28ff62a4873d2fc6d2fcc5ee276652c83446b3ea8271a7360fca279a3a2b675be718bb7ecff73898cec0a69eadd5d57ebb430b0fa83ecafd32a8'
             '1e901b8894743e9dcb04046a5fa58e14b19095b3295abae679dcbbf309bd79ddf1716dcd07ae8a71e7cdc9361216c0c9da12a76edb45e9388c512b07df7759e7'
             'db9080b2548e4dcd61eaaf20cd7d37cbbc8c204ce85a2e3408d0671f6b26010f77a61affd2c77e809768714eca29d3afb64765a3f2099317a2c928eff3feb4cf'
             '1a17f83747ebd2dbe8d57996a1234f9e72de0754f8907c984477d761c2d99753490b72d80e2c801b85ded705818d530401f6377e3312937d72d1e4052007ce30'
@@ -40,6 +44,11 @@ validpgpkeys=(
               '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
               'E240B57E2C4630BA768E2F26FC1B547C8D8172C8' # Levente Polyak
 )
+
+export KBUILD_BUILD_HOST=tethys
+export KBUILD_BUILD_USER=builder
+export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
+
 pkgdesc="Kernel for Linode servers"
 depends=(coreutils linux-firmware kmod mkinitcpio grub)
 conflicts=(grub-legacy)
@@ -59,6 +68,13 @@ prepare() {
     [[ $src = *.patch ]] || continue
     echo "Applying patch $src..."
     patch -Np1 < "../$src"
+  done
+
+  ### Add Clearlinux patches
+  for i in $(grep '^Patch' ${srcdir}/clearlinux/linux.spec |\
+        sed -n 's/.*: //p'); do
+    echo "Applying patch ${i}..."
+    patch -Np1 -i "$srcdir/clearlinux/${i}"
   done
 
   # https://github.com/graysky2/kernel_gcc_patch

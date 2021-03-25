@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/x86 5.10.24 Kernel Configuration
+# Linux/x86 5.10.26 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="gcc (GCC) 10.2.0"
 CONFIG_CC_IS_GCC=y
@@ -2545,6 +2545,7 @@ CONFIG_RTC_MC146818_LIB=y
 # CONFIG_AUXDISPLAY is not set
 # CONFIG_CHARLCD is not set
 # CONFIG_UIO is not set
+# CONFIG_VFIO is not set
 CONFIG_IRQ_BYPASS_MANAGER=m
 CONFIG_VIRT_DRIVERS=y
 # CONFIG_VBOXGUEST is not set
