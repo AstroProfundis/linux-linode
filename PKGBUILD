@@ -4,14 +4,14 @@
 
 pkgbase=linux-linode
 _basekernel=5.10
-pkgrel=1
+pkgrel=2
 _kernelname=${pkgname#linux}
 _srcname=linux-${_basekernel}
 pkgver=${_basekernel}.26
 arch=('x86_64')
 url="https://github.com/yardenac/linux-linode"
 license=(GPL2)
-makedepends=(xmlto docbook-xsl kmod inetutils bc libelf git)
+makedepends=(xmlto docbook-xsl kmod inetutils bc libelf git clang llvm lld)
 options=('!strip')
 _gcc_more_v=20210309
 # Clear Linux patches
@@ -34,7 +34,7 @@ sha512sums=('95bc137d0cf9148da6a9d1f1a878698dc27b40f68e22c597544010a6c591ce1b256
             '53cf1f6f17840224fe7406d529968148f09b7f6c1a92bcb677816f19176cfc52eec194e9f8a02666815c1489abd03bdea36a1fb7233bf828dea618318fc76050'
             'SKIP'
             '003e33e214065a57df00458d4a88db5cc33eb00030a516264fc4b2e4de9b6649466451260a30cf86667f8981fc493103dea509217b3850773a65d3beb95e6441'
-            '55f40f473c9d28ff62a4873d2fc6d2fcc5ee276652c83446b3ea8271a7360fca279a3a2b675be718bb7ecff73898cec0a69eadd5d57ebb430b0fa83ecafd32a8'
+            '74c1364acf8c23cbb7d7ba4e5f2b3cb168754dd6add8d89923a38b84a9372834ceadd46cb45a29dfd86a49ba08a35df58c10da3b997f9b1ea65789c9ca8499c6'
             '1e901b8894743e9dcb04046a5fa58e14b19095b3295abae679dcbbf309bd79ddf1716dcd07ae8a71e7cdc9361216c0c9da12a76edb45e9388c512b07df7759e7'
             'db9080b2548e4dcd61eaaf20cd7d37cbbc8c204ce85a2e3408d0671f6b26010f77a61affd2c77e809768714eca29d3afb64765a3f2099317a2c928eff3feb4cf'
             '1a17f83747ebd2dbe8d57996a1234f9e72de0754f8907c984477d761c2d99753490b72d80e2c801b85ded705818d530401f6377e3312937d72d1e4052007ce30'
@@ -83,14 +83,14 @@ prepare() {
   patch -Np1 -i "$srcdir/kernel_gcc_patch-$_gcc_more_v/more-uarches-for-gcc-v10-and-kernel-5.8+.patch"
 
   cp "${srcdir}/config" .config
-  make oldconfig
-  make -s kernelrelease > version
+  make LLVM=1 oldconfig
+  make LLVM=1 -s kernelrelease > version
 }
 
 build() {
   cd "${srcdir}/${_srcname}"
   [[ "$MAKEFLAGS" =~ -j[0-9]* ]] || MAKEFLAGS+=" -j$(nproc)"
-  ionice -c 3 nice -n 16 make ${MAKEFLAGS} bzImage modules
+  ionice -c 3 nice -n 16 make LLVM=1 ${MAKEFLAGS} bzImage modules
 }
 
 _package() {
@@ -109,13 +109,13 @@ _package() {
   echo "Installing boot image..."
   # systemd expects to find the kernel here to allow hibernation
   # https://github.com/systemd/systemd/commit/edda44605f06a41fb86b7ab8128dcf99161d2344
-  install -Dm644 "$(make -s image_name)" "$modulesdir/vmlinuz"
+  install -Dm644 "$(make LLVM=1 -s image_name)" "$modulesdir/vmlinuz"
 
   # Used by mkinitcpio to name the kernel
   echo "$pkgbase" | install -Dm644 /dev/stdin "$modulesdir/pkgbase"
 
   echo "Installing modules..."
-  make INSTALL_MOD_PATH="$pkgdir/usr" modules_install
+  make LLVM=1 INSTALL_MOD_PATH="$pkgdir/usr" modules_install
 
   # remove build and source links
   rm "$modulesdir"/{source,build}
