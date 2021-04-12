@@ -4,10 +4,10 @@
 
 pkgbase=linux-linode
 _basekernel=5.10
-pkgrel=2
+pkgrel=1
 _kernelname=${pkgname#linux}
-_srcname=linux-${_basekernel}
-pkgver=${_basekernel}.26
+pkgver=${_basekernel}.29
+_srcname=linux-${pkgver}
 arch=('x86_64')
 url="https://github.com/yardenac/linux-linode"
 license=(GPL2)
@@ -19,7 +19,6 @@ _clr=${_basekernel}.19-1032
 _uksm_path="https://gitlab.com/sirlucjan/kernel-patches/-/raw/master/${_basekernel}/uksm-patches"
 _uksm_patch="0001-UKSM-for-${_basekernel}.patch"
 source=("https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/${_srcname}.tar."{xz,sign}
-        "https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/patch-${pkgver}.xz"
         "more-uarches-$_gcc_more_v.tar.gz::https://github.com/graysky2/kernel_gcc_patch/archive/$_gcc_more_v.tar.gz"
         "clearlinux::git+https://github.com/clearlinux-pkgs/linux.git#tag=${_clr}"
         "${_uksm_path}/${_uksm_patch}"
@@ -28,9 +27,8 @@ source=("https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/${_srcname}.tar."{xz,s
         '99-grub-ll.hook'
         'menu.lst'
         'preset')
-sha512sums=('95bc137d0cf9148da6a9d1f1a878698dc27b40f68e22c597544010a6c591ce1b256f083489d3ff45ff77753289b535135590194d88ef9f007d0ddab3d74de70e'
+sha512sums=('cb0f11b2b3ef0a98d73cbf386199d195d055ee9ac402f8fed7c2c7a09a932c938de63bf28a28a6bef8917a9974d35e7dc4118a408a50341196d1dc3617cc8498'
             'SKIP'
-            '0938834855a70ee5a77d7fc45f3f005983d0ad726f9d6367297970d885f19c433cf09c8592f74ba5c2861bf7eeb303455dd7ecebf4ff4c31baeff7c96357b9be'
             '53cf1f6f17840224fe7406d529968148f09b7f6c1a92bcb677816f19176cfc52eec194e9f8a02666815c1489abd03bdea36a1fb7233bf828dea618318fc76050'
             'SKIP'
             '003e33e214065a57df00458d4a88db5cc33eb00030a516264fc4b2e4de9b6649466451260a30cf86667f8981fc493103dea509217b3850773a65d3beb95e6441'
@@ -57,9 +55,6 @@ backup=(etc/mkinitcpio.d/${pkgname}.preset boot/grub/menu.lst)
 prepare() {
   cd "${srcdir}/${_srcname}"
   scripts/setlocalversion --save-scmversion
-
-  echo "Applying Linux patch..."
-  patch -Np1 -i ../patch-${pkgver}
 
   local src
   for src in "${source[@]}"; do
