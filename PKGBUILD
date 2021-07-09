@@ -6,7 +6,7 @@ pkgbase=linux-linode
 _basekernel=5.10
 pkgrel=1
 _kernelname=${pkgname#linux}
-pkgver=${_basekernel}.29
+pkgver=${_basekernel}.48
 _srcname=linux-${pkgver}
 arch=('x86_64')
 url="https://github.com/yardenac/linux-linode"
@@ -27,12 +27,12 @@ source=("https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/${_srcname}.tar."{xz,s
         '99-grub-ll.hook'
         'menu.lst'
         'preset')
-sha512sums=('cb0f11b2b3ef0a98d73cbf386199d195d055ee9ac402f8fed7c2c7a09a932c938de63bf28a28a6bef8917a9974d35e7dc4118a408a50341196d1dc3617cc8498'
+sha512sums=('18958e0af1b6170e7388fe3bd1669af266980d7d8678ea2198a4828a1b0d261754a1c16e1044d5230275205395a34bfe943d868ab7e084b1a547123f7f9421ce'
             'SKIP'
             '53cf1f6f17840224fe7406d529968148f09b7f6c1a92bcb677816f19176cfc52eec194e9f8a02666815c1489abd03bdea36a1fb7233bf828dea618318fc76050'
             'SKIP'
             '003e33e214065a57df00458d4a88db5cc33eb00030a516264fc4b2e4de9b6649466451260a30cf86667f8981fc493103dea509217b3850773a65d3beb95e6441'
-            '74c1364acf8c23cbb7d7ba4e5f2b3cb168754dd6add8d89923a38b84a9372834ceadd46cb45a29dfd86a49ba08a35df58c10da3b997f9b1ea65789c9ca8499c6'
+            'b8187006214e791fe8757c12820a132165ceecdd537c35b1ecc8abb42d8ce3c382412f0dff375cfd27ed6016cc8c8548a0ad9e7e2aff8c7f3097944620b54ed1'
             '1e901b8894743e9dcb04046a5fa58e14b19095b3295abae679dcbbf309bd79ddf1716dcd07ae8a71e7cdc9361216c0c9da12a76edb45e9388c512b07df7759e7'
             'db9080b2548e4dcd61eaaf20cd7d37cbbc8c204ce85a2e3408d0671f6b26010f77a61affd2c77e809768714eca29d3afb64765a3f2099317a2c928eff3feb4cf'
             '1a17f83747ebd2dbe8d57996a1234f9e72de0754f8907c984477d761c2d99753490b72d80e2c801b85ded705818d530401f6377e3312937d72d1e4052007ce30'
@@ -67,6 +67,7 @@ prepare() {
 
   ### Add Clearlinux patches
   for i in $(grep '^Patch' ${srcdir}/clearlinux/linux.spec |\
+        grep -v '0126-x86-microcode-echo-2-reload-to-force-load-ucode.patch' |\
         sed -n 's/.*: //p'); do
     echo "Applying patch ${i}..."
     patch -Np1 -i "$srcdir/clearlinux/${i}"
